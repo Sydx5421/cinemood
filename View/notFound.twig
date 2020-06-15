@@ -1,0 +1,11 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<div class="text-center">
+    <p>La page demandée n'existe pas ou plus.</p>
+    <a class="nav-link" href="{{ app.basepath }}home">Retour à l'accueil
+        <span class="sr-only">(current)</span>
+    </a>
+    <p>{{ errorMessage }}</p>
+</div>
+{% endblock %}

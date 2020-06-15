@@ -1,0 +1,46 @@
+{% import 'form.twig' as form %}
+
+
+<nav class="navbar navbar-expand-lg  sticky-top">
+    <a class="titleBrand" href="/">Cinemood</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ app.basepath }}home">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ app.basepath }}categories">Catégories</a>
+            </li>
+            {% if app.session.user  %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ app.basepath }}dashboard/{{ app.session.user.id }}">Dashboard</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ app.basepath }}register">S'inscrire</a>
+                </li>
+            {% endif %}
+        </ul>
+        {% if app.session.user  %}
+            <form class="deconnexion form-inline my-2 my-lg-0" method="POST" action="{{ app.basepath }}deconnexion">
+                <div>
+                    <span>{{ app.session.user.pseudo }}</span>
+                    <a href="{{ app.basepath }}dashboard" title="tableau de bord de {{ app.session.user.pseudo }}"><i class="far fa-fw fa-user nwl_orange"></i></a>
+                </div>
+{#                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">#}
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="deconnexion">déconnexion</button>
+            </form>
+        {% else %}
+            <form class="form-inline my-2 my-lg-0" method="POST" action="{{ app.basepath }}login">
+                <input type="text" name="email_or_pseudo" class="form-control col-xs" placeholder="E-mail ou pseudo">
+                <input type="password" name="password" class="form-control col-xs" placeholder="Mot de passe">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit" name="confirm_login">Login</button>
+            </form>
+        {% endif %}
+    </div>
+</nav>
+

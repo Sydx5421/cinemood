@@ -1,0 +1,218 @@
+{% extends 'layout.twig' %}
+
+{% set classPage = 'dashboard' %}
+
+{% block content %}
+    <header>
+        <div class="jumbotron">
+            <div  class="container">
+                <h1>Dashboard de {{ app.session.user.pseudo }} </h1>
+                <p>Bienvenue sur votre tableau de bord Cinemood</p>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div id="innerContent" class="container">
+            <h2>Vos classements</h2>
+
+            <div>
+                <div class="media mb-4">
+                    <table class="table table-dark">
+                        <thead>
+                            <tr class="d-flex">
+                                <th scope="col" class="col-12 col-md-1 text-center"></th>
+                                <th scope="col" class="col-5 col-md-2 text-center">Films</th>
+                                <th scope="col" class="col-6 col-md-3 text-center">Catégories</th>
+                                <th scope="col" class="col-12 col-md-6 text-center">Commentaires</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% if mcuList is iterable %}
+                            {% for MCUConnection in mcuList %}
+                                {# Boucle affichage des connexions : #}
+                                <tr id="row_{{ MCUConnection.id }}" class="d-flex flex-wrap">
+                                    <td class="deleteCol col-12 col-md-1">
+                                        <button class="btn deleteMcuConnection" data-mcuId ="{{ MCUConnection.id }}" >
+                                            <i class="fas fa-unlink"></i>
+                                        </button>
+                                    </td>
+                                    <td class="col-5 col-md-2 text-center">
+                                        <a href="{{ app.basepath }}movie/{{ MCUConnection.movieId }}">
+                                            <figure class="">
+                                                {% if MCUConnection.poster_path  %}
+                                                    <img src='http://image.tmdb.org/t/p/w92{{ MCUConnection.poster_path }}' alt="{{ MCUConnection.title }} poster">
+                                                {% else %}
+                                                    <img style="width : 92px; height : 138px;" src='{{ app.basepath }}Public/img/no_poster.png' alt="Poster not found">
+                                                {% endif %}
+                                                <figcaption>{{ MCUConnection.title }}</figcaption>
+                                            </figure>
+                                        </a>
+                                    </td>
+                                    <td class="col-6 col-md-3 text-center categoryElt" style="background-color: {{ MCUConnection.background_color }};">
+                                        <a href="{{ app.basepath }}category/{{ MCUConnection.categoryId }}">
+                                            <p style="color : {{ MCUConnection.font_color }} "> {{ MCUConnection.nom }}</p>
+                                        </a>
+                                    </td>
+                                    <td id="nwl_comment_cell_{{ MCUConnection.id }}" class="col-12 col-md-6 nwl_comment_cell">
+                                        <i class="fas fa-spinner fa-pulse" id="spinner_{{ MCUConnection.id }}"></i>
+                                        <div class="firstBtnsWrapper">
+                                            <button class="btn editComment" data-mcuId ="{{ MCUConnection.id }}" ><i class="far fa-edit"></i></button>
+                                            {% if MCUConnection.justificationComment is not null %}
+                                                <button class="btn deleteComment" data-mcuId ="{{ MCUConnection.id }}" ><i class="fas fa-dumpster-fire"></i></button>
+                                            {% endif %}
+                                        </div>
+                                        <div id="comment_elt_{{ MCUConnection.id }}" class="comment_elt" contenteditable="false" >{{ MCUConnection.justificationComment }} </div>
+                                        <div class="secondBtnsWrapper">
+                                            <button  class="btn cancelEdit" data-mcuId ="{{ MCUConnection.id }}">Annuler</button>
+                                            <button  class="btn sendComment" data-mcuId ="{{ MCUConnection.id }}">Valider</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {# Fin du foreach #}
+                            {% endfor %}
+                        {% else %}
+                            {# mcuList is probably a string #}
+                            <tr class="d-flex">
+                                <td class="col-12 text-center">
+                                    <h5 class="mt-0">{{ mcuList }}</h5>
+                                </td>
+                            </tr>
+                        {% endif %}
+
+                            <tfoot>
+                                <tr class="d-flex">
+                                    <th scope="col" class="col-2">Films</th>
+                                    <th scope="col" class="col-3">Categories</th>
+                                    <th scope="col" class="col-7">Commentaires</th>
+                                </tr>
+                            </tfoot>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+        $(document).ready(function(){
+            var allButtons = $('button[class^=btn]');
+
+            // On abonne chaque bouton à un evt click
+            for (var i = 0; i < allButtons.length; i++) {
+                allButtons[i].addEventListener('click', function() {
+                    if(this.classList.contains("editComment")){
+                        var firstBtnsWrapper = $(this).parent(".firstBtnsWrapper"),
+                            thisParentCellId = $(firstBtnsWrapper).parent().attr("id"),
+                            commentDiv = $(this).parent(".firstBtnsWrapper").siblings(".comment_elt"),
+                            secondBtnsWrapper = $(commentDiv).siblings(".secondBtnsWrapper"),
+                            cancelBtn = $(secondBtnsWrapper).find(".cancelEdit"),
+                            mcuId =  this.getAttribute("data-mcuId"),
+                            spinnerId = "spinner_" + mcuId;
+                        $(commentDiv).attr("contenteditable", "true");
+                        $(firstBtnsWrapper).hide();
+                        $(secondBtnsWrapper).show();
+                        $(cancelBtn).on('click', function() {
+                            let comment = $(firstBtnsWrapper).siblings(".comment_elt").text();
+                            EditAjax("editComment/" + mcuId, "cancel", thisParentCellId, callbackOnEdit, spinnerId, comment);
+                            $(commentDiv).attr("contenteditable", "false");
+                            $(commentDiv).text("");
+                            $(firstBtnsWrapper).show();
+                            $(secondBtnsWrapper).hide();
+                        });
+                    }else if(this.classList.contains("sendComment")){
+                        var secondBtnsWrapper = $(this).parent(".secondBtnsWrapper"),
+                            thisParentCellId = $(secondBtnsWrapper).parent().attr("id"),
+                            commentDiv = $(this).parent(".secondBtnsWrapper").siblings(".comment_elt"),
+                            firstBtnsWrapper = $(commentDiv).siblings(".firstBtnsWrapper"),
+                            mcuId =  this.getAttribute("data-mcuId"),
+                            spinnerId = "spinner_" + mcuId;
+
+                        if ( confirm( "Êtes-vous sur-e de vouloir enregistrer ces modifications ?") ) {
+                            let comment = $(firstBtnsWrapper).siblings(".comment_elt").text();
+                            // Code à éxécuter si le l'utilisateur clique sur "OK"
+                            EditAjax("editComment/" + mcuId, "edit", thisParentCellId, callbackOnEdit, spinnerId, comment);
+                        }
+
+                    }else if(this.classList.contains("deleteComment")){
+                        var firstBtnsWrapper = $(this).parent(".firstBtnsWrapper");
+                        var thisParentCellId = $(firstBtnsWrapper).parent().attr("id");
+                        var mcuId =  this.getAttribute("data-mcuId");
+                        var spinnerId = "spinner_" + mcuId;
+                        if ( confirm( "Êtes-vous sur-e de vouloir supprimer ce commentaire ?") ) {
+                            EditAjax("editComment/" + mcuId, "delete", thisParentCellId, callbackOnEdit, spinnerId);
+                            $(this).hide();
+                        }
+                    }else if(this.classList.contains("deleteMcuConnection")){
+                        var firstBtnsWrapper = $(this).parent(".firstBtnsWrapper");
+                        var thisParentCellId = $(firstBtnsWrapper).parent().attr("id");
+                        var mcuId =  this.getAttribute("data-mcuId");
+                        if ( confirm( "Êtes-vous sur-e de vouloir supprimer cette connection ?") ) {
+                            deleteRowAjax("deleteConnection/" + mcuId, "row_" + mcuId, callbackOnDelete);
+                        }
+                    }
+
+                });
+            }
+
+            function EditAjax(url, action, thisParentCellId, callbackOnEdit, spinnerId = "", comment = null){ // actions administrateur
+                var xhr = new XMLHttpRequest();
+                let formData = new FormData();
+                if(comment != null){
+                    formData.append("comment", comment);
+                }
+                formData.append("action", action);
+                xhr.open('POST','{{ app.basepath }}' + url );
+
+                xhr.addEventListener('readystatechange', function() { // On gère ici une requête asynchrone
+                    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) { // Si le fichier est chargé sans erreur
+                        $("#"+spinnerId).hide();
+                        let response = xhr.response;
+                        callbackOnEdit(response, thisParentCellId);
+                    } else if (xhr.readyState === XMLHttpRequest.DONE && xhr.status != 200) { // En cas d'erreur !
+                        console.error('Echec HTTP : code' + xhr.status);
+                    }
+                });
+                xhr.send(formData);
+                $("#"+spinnerId).show();
+            }
+
+            function callbackOnEdit(response, parentCellId) {
+                let commentDiv = $("#"+parentCellId).find(".comment_elt"),
+                    firstBtnsWrapper = $("#"+parentCellId).find(".firstBtnsWrapper"),
+                    secondBtnsWrapper = $("#"+parentCellId).find(".secondBtnsWrapper");
+
+                $(commentDiv).attr("contenteditable", "false");
+                $(commentDiv).text(response);
+                $(firstBtnsWrapper).show();
+                $(secondBtnsWrapper).hide();
+
+                if(response != "" && response != null){
+                    $("#"+parentCellId + " .firstBtnsWrapper .deleteComment").show();
+                }
+            }
+
+            function deleteRowAjax(url, rowId, callbackOnDelete) { // actions administrateur
+                var myRequest = new XMLHttpRequest();
+                myRequest.open('GET', '{{ app.basepath }}' + url);
+                myRequest.onreadystatechange = function () {
+                    if (myRequest.readyState === 4) {
+                        callbackOnDelete(rowId);
+                    }
+                };
+                myRequest.send();
+                $("#" + rowId).hide();
+            }
+
+            function callbackOnDelete(rowId) {
+                $("#" + rowId).remove();
+            }
+
+        });
+    </script>
+
+{% endblock %}

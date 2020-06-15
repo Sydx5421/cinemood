@@ -1,0 +1,110 @@
+{% extends 'layout.twig' %}
+
+{% set classPage = 'homePage' %}
+
+{% block content %}
+    <header>
+        <div class="jumbotron">
+            <div class="container">
+                <h1>Bienvenue sur Cinemood</h1>
+                <p class="subtitle">Le site qui vous permet de classer et de rechercher des films selon des catégories que vous créez !</p>
+                <p>Pour classer un film dans une catégorie, rendez-vous sur la <a href="{{ app.basepath }}categories">page des catégories</a> et selectionnez la catégorie de votre choix ou créez-en une nouvelle! Une fois sur la page de la catégorie choisie vous pourrez rechercher le film que vous souhaitez y ajouter. N'hésitez à commenter votre classement ! </p>
+                <p>A la rechercher d'un bon film à regarder? Visiter les pages de vos catégories favorites et découvrez ce que les membres de la communauté Cinemood y ont ajouté! </p>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- ********************** Dernières connections ****************** -->
+            <div class="search_results row">
+                <h2><strong>Exemples de connections :</strong> </h2>
+                {% if lastMcuConnection is iterable %}
+                    {% for MCUConnection in lastMcuConnection %}
+                        <div class="mcuLinkWrapp">
+                            <i class="fas fa-link"></i>
+                            <a href="{{ app.basepath }}movie/{{ MCUConnection.movieId }}" title="Voir la fiche Cinemood de ce film">
+                                <figure class="">
+                                    {% if MCUConnection.poster_path  %}
+                                        <img src='http://image.tmdb.org/t/p/w154{{ MCUConnection.poster_path }}' alt="{{ MCUConnection.title }} poster">
+                                    {% else %}
+                                        <img style="width : 92px; height : 138px;" src='{{ app.basepath }}Public/img/no_poster.png' alt="Poster not found">
+                                    {% endif %}
+                                    <figcaption>{{ MCUConnection.title }}</figcaption>
+                                </figure>
+                            </a>
+                            <a href="{{ app.basepath }}category/{{ MCUConnection.categoryId }}" title="Voir la fiche Cinemood de cette catégorie">
+                                <p class="categoryElt" style="background-color: {{ MCUConnection.background_color }}; color : {{ MCUConnection.font_color }} "> {{ MCUConnection.nom }}</p>
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <!-- ********************** Dernières catégories créées ****************** -->
+            <div class="search_results row lastCategories">
+                <h2><strong>Catégories aléatoires :</strong> </h2>
+                {% if lastCategories is iterable %}
+                    {% for category in lastCategories %}
+                        <a href="{{ app.basepath }}category/{{ category.id }}" title="Voir la fiche Cinemood de cette catégorie">
+                            <p class="categoryElt" style="background-color: {{ category.backgroundColor }}; color : {{ category.fontColor }} "> {{ category.nom }}</p>
+                        </a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <!-- ********************** Random Movies ****************** -->
+            <div id="randomMoviesRow" class="search_results row">
+                <h2><strong>Random Movies :</strong> Connaissez-vous ces films? Classez-les !</h2>
+                <i class="fas fa-spinner fa-pulse" id="randomMoviesSpinner"></i>
+            </div>
+            <hr>
+        </div> <!-- /container -->
+    </main>
+
+
+        <!-- **************** FOOTER **************** -->
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function () {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET','{{ app.basepath }}randomMovies' );
+            xhr.addEventListener('readystatechange', function() { // On gère ici une requête asynchrone
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) { // Si le fichier est chargé sans erreur
+                    $("#randomMoviesSpinner").hide();
+
+                    let response = JSON.parse(xhr.response);
+                    var randomMoviesRow = $("#randomMoviesRow");
+                    for (var i = 0; i < response.length; i++){
+                        var film = response[i],
+                            title = film["title"],
+                            posterPath = film["poster_path"],
+                            filmId = film["id"]
+                        if(posterPath != null){
+                            $(randomMoviesRow).append(
+                                '<a href="{{ app.basepath }}movie/' + filmId + '" class="text-center">\n' +
+                                '    <figure class="">\n' +
+                                '        <img src=\'http://image.tmdb.org/t/p/w185' + posterPath + '\' alt=" ' + title + ' poster">\n' +
+                                '        <figcaption>' + title + '</figcaption>\n' +
+                                '    </figure>\n' +
+                                '</a>');
+                        }else{
+                            $(randomMoviesRow).append(
+                                '<a href="{{ app.basepath }}movie/' + filmId + '" class="text-center">\n' +
+                                '    <figure class="">\n' +
+                                '        <img style="width : 185px; height : 278px;" src="{{ app.basepath }}Public/img/no_poster.png" alt="Poster not found">' +
+                                '        <figcaption>' + title + '</figcaption>\n' +
+                                '    </figure>\n' +
+                                '</a>');
+                        }
+                    }
+                }
+            });
+            xhr.send();
+            $("#randomMoviesSpinner").show();
+        });
+
+    </script>
+
+{% endblock %}

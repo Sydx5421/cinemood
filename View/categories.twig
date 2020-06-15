@@ -1,0 +1,88 @@
+{% extends 'layout.twig' %}
+{% import 'form.twig' as form %}
+
+{% set classPage = 'categoriesPage' %}
+
+{% block content %}
+    <header>
+        {% if app.session.user  %}
+            <div class="jumbotron">
+                <div class="container">
+                    <h1>Créer une nouvelle catégorie</h1>
+                    <div class="formContainer">
+                        <div id="cat_preview">
+                            <p class="categoryElt" >Nom de votre categorie</p>
+                        </div>
+                        <form method="POST" action="{{ app.basepath }}createCategory" class="basicForms" >
+                            <table class="table_form">
+                                {{ form.input_placeholder('userId', {'type' : 'hidden', 'value' : app.session.user.id }) }}
+
+                                {{ form.input_placeholder('nameCategory', {'label' : 'Nom de la catégorie', 'placeholder' : 'Womance'}) }}
+
+                                {{ form.input_placeholder('backgroundColor', {'label' : 'Choisissez une couleur de fond pour votre catégorie', 'onchange' : 'fetch()', 'type' : 'color'}) }}
+                                {{ form.input_placeholder('fontColor', {'label' : 'Choisissez une couleur de police pour votre catégorie', 'type' : 'color'}) }}
+
+                                {{ form.textarea('descriptionCat', {'label' : 'Description', 'rows' : '5', 'placeholder' : 'La catégorie "Womance" peut-être/doit être attribuée aux films dépeignant comme relation romantique principale une relation d\'amitié forte entre 2 personnages principaux féminins. Ex: The Heat.'}) }}
+
+
+                            </table>
+
+                            <div class="nwl_submit_btn">
+                                <button class="btn btn-primary" type="submit" name="confirm_create">Créer</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="jumbotron">
+                <div class="container">
+                    <h1>Catégories</h1>
+                    <p>Retrouver ici toutes les catégories créées par les membres de la communauté Cinemood pour classer les films.</p>
+                    <p>Rejoignez la communauté afin de pouvoir créer vos propres catégories!</p>
+                </div>
+            </div>
+        {% endif %}
+    </header>
+
+    <main>
+        <div class="container">
+            <h2>Liste des catégories</h2>
+        </div>
+        <div class="container search_results">
+            {% if categories is iterable %}
+                {% for category in categories %}
+                    <a href="{{ app.basepath }}category/{{ category.id }}">
+                        <p class="categoryElt" style="background-color: {{ category.backgroundColor }}; color : {{ category.fontColor }} "> {{ category.nom }}</p>
+                    </a>
+                {% endfor %}
+            {% else %}
+                {{ categories }}
+            {% endif %}
+        </div>
+    </main>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $( document ).ready(function(){
+            // Preview de l'apparence de la catégorie
+            let input = $("#nameCategory");
+            input.keyup(function() {
+                let value = $("#nameCategory").val();
+                $("#cat_preview p").text(value);
+            });
+
+            $("#backgroundColor").change(function(){
+                var value = $("#backgroundColor").val();
+                $("#cat_preview p").css( "background-color", value);
+            })
+
+            $("#fontColor").change(function(){
+                var value = $("#fontColor").val();
+                $("#cat_preview p").css( "color", value);
+            })
+        });
+    </script>
+{% endblock %}

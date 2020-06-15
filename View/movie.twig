@@ -1,0 +1,171 @@
+{% extends 'layout.twig' %}
+{% import 'form.twig' as form %}
+
+{% set classPage = 'moviePage' %}
+
+{% block content %}
+    <header>
+        <div class="jumbotron">
+            <div class="container">
+                <h1>{{ movie.title }}</h1>
+            </div>
+            <div class="container filmInfosWrapper1">
+                <a href="{{ app.basepath }}movie/{{ movie.id }}" class="movieThumbnail">
+                    <figure>
+                        {% if movie.poster_path  %}
+                            <img src='http://image.tmdb.org/t/p/w185{{ movie.poster_path }}' alt="{{ movies.title }} poster">
+                        {% else %}
+                            <img style="width : 185px; height : 278px;" src='{{ app.basepath }}Public/img/no_poster.png' alt="Poster not found">
+                        {% endif %}
+                        <figcaption></figcaption>
+                    </figure>
+                </a>
+                <div>
+                    <table class="filmInfos">
+                        <tbody>
+                            <tr>
+                                <td>Titre original : </td>
+                                <td> {{ movie.original_title }} </td>
+                            </tr>
+                            <tr>
+                                <td>Date de sortie : </td>
+                                <td> {{ movie.release_date }}</td>
+                            </tr>
+                            <tr>
+                                <td>Statut :</td>
+                                <td> {{ movie.status }} </td>
+                            </tr>
+                            <tr>
+                                <td>Langue originale : </td>
+                                <td>
+                                    {% for language in movie.spoken_languages %}
+                                        {{ language.name }},
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Genre :</td>
+                                <td>
+                                    {% for genre in movie.genres %}
+                                        {{ genre.name }},
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Synopsis : </td>
+                                <td> {{ movie.overview }} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div id="search_results" class="container categoryList">
+            {% if category is null %}
+            {# AFficher la liste des catégorie associée à ce film si il y en a #}
+                <h2>Liste des catégories associées à ce film</h2>
+
+                <div class="container search_results">
+                    {% if categories is iterable %}
+                        {% for category in categories %}
+                            <div class="categoryHolder">
+                                <a href="{{ app.basepath }}category/{{ category.id }}" title="Voir la fiche de la catégorie">
+                                    <p class="categoryElt" style="background-color: {{ category.backgroundColor }}; color : {{ category.fontColor }}"> {{ category.nom }}</p>
+                                </a>
+                                {% if category.nbComments > 0 %}
+                                    <a href="{{ app.basepath }}movie/{{ movie.id }}/cat/{{ category.id }}" class="seeComments" title="Voir les commentaires">
+                                        <i class="fas fa-comment-alt"></i>
+                                        <span>{{ category.nbComments }}</span>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        {{ categories }}
+                    {% endif %}
+                </div>
+
+
+            {% else %}
+            {# Dans le cas ou une catégorie est déjà selectionnée, afficher les commentaires concernant ce film pour cette catégorie#}
+                <h2>Commentaires justifiant du classement de ce film dans la catégorie :</h2>
+                <div class="container categoryHolder">
+                    <a href="{{ app.basepath }}category/{{ category.id }}">
+                        <p class="categoryElt" style="background-color: {{ category.backgroundColor }}; color : {{ category.fontColor }} "> {{ category.nom }}</p>
+                    </a>
+                </div>
+                <div class="comments_list">
+                    {% if mcuList is iterable %}
+                        {% for MCUConnection in mcuList %}
+                            {% if MCUConnection.justificationComment is not null %}
+                                <div class="comment_elt">
+                                    <span><a href=""><i class="far fa-fw fa-user"></i>{{ MCUConnection.pseudo }}</a> - {{ MCUConnection.creationDate }} </span>
+                                    <p class="text_comment"> {{ MCUConnection.justificationComment }} </p>
+                                    {% if app.isAdmin == true %}
+                                        <button class="btn nwl_suprimer " data-id="{{ MCUConnection.id }}" title="Supprimer ce commentaire"><i class="fas fa-dumpster-fire"></i></button>
+{#                                    {% else %}#}
+{#                                        <button class="nwl_report" data-id="{{ MCUConnection.id }}" title="Signaler ce commentaire">Signaler</button>#}
+                                    {% endif %}
+    {#                                <i class="fas fa-dumpster-fire"></i>#}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {# mcuList is probably a string #}
+                        {{ mcuList }}
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </main>
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+
+    <script>
+        $(document).ready(function(){
+            var allButtons = $('button[class^=btn]');
+
+            // On abonne chaque bouton à un evt click
+            for (var i = 0; i < allButtons.length; i++) {
+                allButtons[i].addEventListener('click', function() {
+                    if(this.classList.contains("nwl_suprimer")){
+                        if ( confirm( "Êtes-vous sur-e de vouloir supprimer ce message?" ) ) {
+                            adminActionComment(this.getAttribute("data-id"), 'delete');
+                            commentElt = $(this).parents(".comment_elt");
+                            commentEltParent = commentElt[0].parentNode;
+                            commentEltParent.removeChild(commentElt[0]);
+                        }
+                    }
+                });
+            }
+
+            function adminActionComment(commentId, action){ // actions administrateur
+                var xhr = new XMLHttpRequest();
+                let formData = new FormData();
+                formData.append("commentAction", action);
+                formData.append("id", commentId);
+                xhr.open('POST','{{ app.basepath }}adminActionComment' );
+                xhr.addEventListener('readystatechange', function() { // On gère ici une requête asynchrone
+                    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) { // Si le fichier est chargé sans erreur
+                        let response = JSON.parse(xhr.response);
+                        if(response.result == 1){
+                            let response = JSON.parse(xhr.response);
+                        }else if(response.result == 0) {
+                            alert('le  commentaire d\'id : ' + commentId + ', n\'a PAS été ' + action);
+                        }
+                    }
+                });
+                xhr.send(formData);
+            }
+
+        });
+    </script>
+
+
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'layout.twig' %}
+{% import 'form.twig' as form %}
+
+{% set classPage = 'categoryPage' %}
+
+{% block content %}
+    <header>
+        {% if app.session.user  %}
+            <div class="jumbotron">
+                <div class="container">
+                    <div class="categoryInfos">
+                        <div class="titleWrapper" ><h1 class="categoryElt" style="background-color: {{ category.backgroundColor }}; color : {{ category.fontColor }} ">{{ category.nom }}</h1></div>
+                        <div class="descriptionWrapper"><p>{{ category.description }}</p></div>
+                    </div>
+
+                    <div class="categoryActions">
+                        <a type="button" href="{{ app.basepath }}category/{{ category.id }}" id="moviesSearch" class="btn btn_cinemood_basic_full" data-target="categoryFilms"><i class="fas fa-th-list fa-fw"></i>Voir les films associés</a>
+                        <a type="button" href="{{ app.basepath }}category/{{ category.id }}/search" id="moviesSearch" class="btn btn_cinemood_basic_full" data-target="categorySearch"><i class="fas fa-search fa-fw"></i>Chercher des films à ajouter à cette catégorie</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="jumbotron">
+                <div class="container">
+                    <p class="subtitle" >Pour ajouter des films à cette catégorie connectez-vous ou <a href="{{ app.basepath }}register">inscrivez-vous</a>!</p>
+                    <div class="categoryInfos">
+                        <div class="titleWrapper" ><h1 class="categoryElt" style="background-color: {{ category.backgroundColor }}; color : {{ category.fontColor }} ">{{ category.nom }}</h1></div>
+                        <div class="descriptionWrapper">
+                            <p class="nwl_label">Description : </p>
+                            <p>{{ category.description }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </header>
+
+    <main>
+        <div id="innerContent" class="container">
+            {% if module == 'categorySearch' %}
+                {{ include('module/categoryNewMovieSearch.twig') }}
+            {% elseif module == 'addMovie' %}
+                {{ include('module/addMoviesToCategory.twig') }}
+            {% else %}
+                {{ include('module/categoryMovieList.twig') }}
+            {% endif %}
+        </div>
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    $(document).ready(function(){
+        // set the trigger and the container variables
+        var trigger = $(".categoryActions button"),
+            container = $("#innerContent");
+
+        // Fire on click
+        trigger.on('click', function(){
+            // Set $this for re-use. Set target from data-attribute
+            var $this = $(this),
+                target = $this.data('target');
+
+            // Load target page into container
+            container.load('module/' + target + '.twig');
+
+        });
+    });
+</script>
+{% endblock %}

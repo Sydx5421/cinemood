@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="Classez et recherchez des films selon des catégories que vous créez ! Découvrez et faites découvrir des films suceptibles de plaire d'avange grâce des classements subjectifs et argumentés. Rejoignez la communauté Cinemood.">
+    <meta name="author" content="Syd2120">
+
+    <meta property="og:image" content="{{ app.basepath }}/Public/img/cinemood_logo.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="900">
+    <meta property="og:image:height" content="500">
+
+    <link rel="icon" href="{{ app.basepath }}/Public/img/cinemood_icon.png">
+{#    <link rel="canonical" href="https://getbootstrap.com/docs/3.3/examples/jumbotron/">#}
+
+    <title>Cinemood</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ app.basepath }}/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+{#    <link href="https://getbootstrap.com/docs/3.3/examples/jumbotron/jumbotron.css" rel="stylesheet">#}
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!--    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">-->
+
+    <!-- Custom styles for this template -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="{{ app.basepath }}/Public/css/monStyle.css" rel="stylesheet" type="text/css">
+
+    <script src="https://kit.fontawesome.com/5d667a149f.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body class="{{ classPage }}">
+
+{{ include('module/nav.twig') }}
+
+<!-- *********Gestion du message flash ***********-->
+{% if app.flash %}
+    <div class="alert {{ app.flash.type }} alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ app.flash.message }}
+    </div>
+{% endif %}
+
+
+{# ************* Main Page content ************ #}
+{% if block("content") is defined %}
+    {{ block('content') }}
+{% endif %}
+
+
+{# ************ Footer *************#}
+<footer>
+    <div class="container">
+        <div class="nwl_copyright">Copyright © 2020 Cinemood</div>
+        <div class="tmdb_logo_container">
+            <img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg" alt="The Movie DB logo">
+        </div>
+    </div>
+</footer>
+
+
+<!-- Bootstrap core JavaScript================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+{#<script src="../../dist/js/bootstrap.min.js"></script>#}
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
+
+
+{% if block("javascripts") is defined %}
+    {{ block('javascripts') }}
+{% endif %}
+
+
+
+</body>
+</html>

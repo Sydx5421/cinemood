@@ -1,0 +1,34 @@
+{% macro input_placeholder(name, options = [] ) %}
+{#    <div class="form-group  {{ options.class }}">#}
+        <tr>
+            <td>
+                {% if options.label != null %}
+                    <label for="{{ name }}" class="{{ options.labelClass }}">{{ options.label }} :</label>
+                {% endif %}
+            </td>
+
+            <td class="">
+                <input type="{{options.type ?: 'text'}}" class="form-control {{ options.inputClass }}" id="{{ name }}" name="{{ name }}"
+                       {% if options.value is defined %} value="{{ options.value }}" {% endif %}
+                       {% if options.placeholder is defined %} placeholder="{{ options.placeholder }}" {% endif %}
+                       {% if options.onchange is defined %} onchange="{{ options.onchange }}" {% endif %}>
+            </td>
+        </tr>
+{#    </div>#}
+{% endmacro %}
+
+{% macro textarea(name, options = [] ) %}
+    <tr>
+        <td>
+            <label for="{{ name }}">{{ options.label }} :</label>
+        </td>
+        <td>
+            <textarea name="{{ name }}"
+              {% if options.id is defined %} id="{{ options.id }}" {% endif %}
+              {% if options.class is defined %} class="{{ options.class }}" {% endif %}
+              {% if options.rows is defined %} rows="{{ options.rows }}" {% endif %}
+              {% if options.cols is defined %} cols="{{ options.cols }}" {% endif %}
+              {% if options.placeholder is defined %} placeholder="{{ options.placeholder }}" {% endif %}>{% if options.value is defined %}{{ options.value }}{% endif %}</textarea>
+        </td>
+    </tr>
+{% endmacro %}

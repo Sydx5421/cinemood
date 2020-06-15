@@ -1,0 +1,70 @@
+{% import 'form.twig' as form %}
+
+<div class="container">
+    <h2>Recherchez des films à ajouter à cette catégorie</h2>
+    <form method="POST" action="{{ app.basepath }}categorySearchNewMovies/{{ category.id }}" class="basicForms" >
+        <table class="table_form">
+            {{ form.input_placeholder('search', {'placeholder' : 'search'}) }}
+
+            {{ form.input_placeholder('pageQuery', {'type' : 'hidden', 'value' : '1'}) }}
+        </table>
+
+        <div class="nwl_submit_btn">
+            <button id="movieSearchBtn" class="btn btn-primary" type="submit" name="confirm_search">Search</button>
+        </div>
+    </form>
+</div>
+<div class="container search_results">
+    {# résultat de la recherche #}
+    <div class="container">
+        <!-- Search results description -->
+        {% if searchQuery  %}
+            <h2>Résultat de la recherche pour "<span>{{searchQuery}}</span>", <span id="nb_results"></span> résultats. Page {{moviesSearchResults.page ? moviesSearchResults.page : "1"}}  sur <span id="nb_pages"></span> pages : totalPage SessionStorage : {{ app.session.totalPagesForSearch }}</h2>
+
+            <!-- *************** film elements ***************** -->
+            <div class="search_results">
+                {% for movie in moviesSearchResults.results %}
+                    <a href="{{ app.basepath }}addMoviesToCategory/{{ category.id }}/{{ movie.id }}" title="Ajouter ce film à la catégorie {{ category.nom }}" class="col-md-4 text-center">
+                        <figure class='movieElt'>
+                            {% if movie.poster_path  %}
+                                <img src='http://image.tmdb.org/t/p/w185{{ movie.poster_path }}' alt="{{ movie.title }} poster">
+                            {% else %}
+                                <img style="width : 185px; height : 278px;" src='{{ app.basepath }}Public/img/no_poster.png' alt="Poster not found">
+                            {% endif %}
+                            <figcaption>{{ movie.title }}</figcaption>
+                        </figure>
+                    </a>
+                {% else %}
+                    <figure class='movieElt'>
+                        <img style="width : 185px; height : 278px;" src='{{ app.basepath }}Public/img/no_poster.png' alt="Poster not found">
+                        <figcaption>Not Found</figcaption>
+                    </figure>
+                {% endfor %}
+            </div>
+
+            {# **************** Pagination **************** #}
+            <nav aria-label="Page navigation example">
+                <ul class="pagination d-flex justify-content-center">
+                    {% if previousPage > 0  %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ app.basepath }}categorySearchNewMovies/{{ category.id }}/{{searchQuery}}/{{ previousPage }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="page-item"><a class="page-link" href="#">{{moviesSearchResults.page ? moviesSearchResults.page : "1"}}</a></li>
+                    {% if nextPage < 10  %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ app.basepath }}categorySearchNewMovies/{{ category.id }}/{{searchQuery}}/{{ nextPage }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div> <!-- /container -->
+
+</div>

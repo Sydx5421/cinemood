@@ -1,0 +1,82 @@
+{% extends 'layout.twig' %}
+{% import 'form.twig' as form %}
+
+
+{% block content %}
+    <header>
+        <div class="jumbotron">
+            <div class="container">
+                <h1>Search Page</h1>
+                <form method="POST" action="{{ app.basepath }}simpleMovieSearch" class="basicForms" >
+                    <table class="table_form">
+                        {{ form.input_placeholder('search', {'placeholder' : 'search'}) }}
+
+                        {{ form.input_placeholder('pageQuery', {'type' : 'hidden', 'value' : '1'}) }}
+                    </table>
+
+                    <div class="nwl_submit_btn">
+                        <button id="movieSearchBtn" class="btn btn-primary" type="submit" name="confirm_search">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <!-- Search results description -->
+            {% if searchQuery  %}
+                <h2>Résultat de la recherche pour "<span>{{searchQuery}}</span>", <span id="nb_results"></span> résultats.  Page {{moviesSearchResults.page ? moviesSearchResults.page : "1"}}  sur <span id="nb_pages"></span> {{ moviesSearchResults.total_pages ?: "" }}</h2>
+            {% endif %}
+
+            <!-- *************** film elements ***************** -->
+            <div class="search_results">
+                {% for movie in moviesSearchResults.results %}
+                    <a href="{{ app.basepath }}movie/{{ movie.id }}" title="" class="col-12 col-xs-4 col-md-3 col-xl-2 text-center">
+                        <figure class='movieElt'>
+                            {% if movie.poster_path  %}
+                                <img src='http://image.tmdb.org/t/p/w185{{ movie.poster_path }}' alt="{{ movie.title }} poster">
+                            {% else %}
+                                <img style="width : 185px; height : 278px;" src='{{ app.basepath }}Public/img/no_poster.png' alt="Poster not found">
+                            {% endif %}
+                            <figcaption>{{ movie.title }}</figcaption>
+                        </figure>
+                    </a>
+                {% else %}
+                    <figure class='movieElt'>
+                        <img style="width : 185px; height : 278px;" src='{{ app.basepath }}Public/img/no_poster.png' alt="Poster not found">
+                        <figcaption>Not Found</figcaption>
+                    </figure>
+                {% endfor %}
+            </div>
+
+            {# **************** Pagination **************** #}
+            <nav aria-label="Page navigation example">
+                <ul class="pagination d-flex justify-content-center">
+                    {% if previousPage > 0  %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ app.basepath }}simpleMovieSearch/{{searchQuery}}/{{ previousPage }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="page-item"><a class="page-link" href="#">{{moviesSearchResults.page ? moviesSearchResults.page : "1"}}</a></li>
+                    {% if nextPage < 10  %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ app.basepath }}simpleMovieSearch/{{searchQuery}}/{{ nextPage }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div> <!-- /container -->
+    </main>
+
+
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}

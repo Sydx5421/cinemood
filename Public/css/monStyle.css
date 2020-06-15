@@ -1,0 +1,553 @@
+/*********** General **************/
+body{
+    background-color: black;
+    color: #cccaca!important;
+    min-height: 100vh;
+}
+main{
+    min-height: 25vh;
+}
+body .jumbotron{
+    color: grey !important;
+}
+.nwl_orange{
+    color: #ff7800;
+}
+
+.titleBrand{
+    color: #ff7800;
+    font-size: 1.5rem;
+}
+a{
+    color:grey;
+}
+a:hover{
+    text-decoration: none;
+    color: grey;
+}
+
+.btn_cinemood_basic_full{
+    color: #fff;
+    background-color: #ff7800c7;
+    border-color: #ff7800;
+}
+.btn_cinemood_basic_empty,
+.btn-outline-success{
+    color: #ff7800;
+    border-color: #ff7800;
+}
+.btn_cinemood_basic:hover,
+.btn-outline-success:hover{
+    color: #fff;
+    background-color: #275baf;
+    border-color: #204b91;
+}
+
+.btn:hover {
+    color: #fff ;
+    text-decoration: none;
+}
+
+.btn_cinemood_basic:active,
+.btn-outline-success:not(:disabled):not(.disabled).active,
+.btn-outline-success:not(:disabled):not(.disabled):active,
+.show > .btn-outline-success.dropdown-toggle {
+    color: #fff;
+    background-color: #275baf;
+    border-color: #204b91;
+}
+.jumbotron a :not(.btn_cinemood_basic_full),
+.jumbotron a :not(.btn_cinemood_basic_full i){
+    color: #b55b5b;
+}
+
+.jumbotron .subtitle{
+    font-size: 1.3rem;
+}
+.jumbotron .nwl_label{
+    margin-bottom: .2rem;
+    text-decoration: underline;
+    font-weight: bold;
+}
+/************ navbar *************/
+nav.navbar{
+    background-color: black;
+}
+nav div.navbar{
+    flex-basis: auto;
+    flex-grow: 1;
+    display: flex;
+    justify-content: start;
+}
+nav div.navbar a:hover,
+nav div.navbar a.active{
+    color:  #e1dddd;
+}
+
+.navbar form.deconnexion div{
+    margin-right: 1rem;
+}
+.navbar form.deconnexion i{
+    font-size: 1.5rem;
+}
+.navbar form.deconnexion div span{
+    color: #e1dddd;
+}
+
+.navbar-toggler{
+    color: #fff !important;
+    border: 1px solid #fff;
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+nav li.nav-item a{
+    color: #dfdfdf;
+}
+nav li.nav-item a:hover,
+nav li.nav-item a.active{
+    color: #fff;
+}
+
+/**************** Forms ********************/
+
+.basicForms{
+    margin: 2rem 0;
+}
+
+.basicForms div{
+    display: flex;
+}
+
+.basicForms div label{
+    width: -moz-available;
+}
+
+div.nwl_submit_btn{
+    justify-content: flex-end;
+}
+
+.basicForms textarea{
+    border-radius: 10px;
+}
+table.table_form{
+    width: 100%;
+}
+
+/**** Form d'ajout de film à une catégorie ******/
+.categoriesPage .jumbotron form{
+    width: 100%;
+    max-width: 500px;
+}
+.categoriesPage .formContainer{
+    display: flex;
+}
+@media (max-width: 1000px) {
+    .categoriesPage .jumbotron>.container{
+        max-width: 100%;
+    }
+    .categoriesPage .formContainer{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .categoriesPage .formContainer form{
+        border: solid 1px #fff;
+        border-radius: 10px;
+        padding: 1rem;
+        margin: auto;
+    }
+}
+.categoriesPage .jumbotron form tr{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+.categoriesPage .jumbotron form tr td,
+.categoriesPage .jumbotron form tr td input[text]{
+    width: 100%;
+}
+.categoriesPage .jumbotron form tr td input[color],
+.categoriesPage .jumbotron form #backgroundColor,
+.categoriesPage .jumbotron form #fontColor{
+    max-width: 200px;
+    margin: auto;
+}
+.categoriesPage .jumbotron form textarea{
+    width: 100%;
+}
+.categoriesPage #cat_preview{
+    margin: 2rem auto;
+}
+.categoriesPage #cat_preview p{
+    background-color: #fff;
+    color: #000;
+    margin: auto;
+}
+
+
+/*********** Search Results *********/
+
+.search_results{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    grid-gap: 2rem 2rem;
+}
+@media (max-width: 500px) {
+    .search_results{
+        justify-content: center;
+    }
+}
+
+.search_results a{
+    display: block;
+    width: min-content;
+    max-width: 300px;
+}
+
+.search_results a figure{
+    width: min-content;
+}
+
+.movieElt{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    padding: 1rem;
+}
+.movieElt:hover{
+    cursor: pointer;
+    border: 2px solid #ff7800 ;
+}
+
+/*********** Home Page *********/
+.homePage h2{
+    width: 100%;
+}
+
+.homePage .search_results.row{
+    margin-top: 5rem;
+}
+.homePage .mcuLinkWrapp{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    text-align: center;
+    position: relative;
+}
+
+.homePage .mcuLinkWrapp i{
+    font-size: 3rem;
+    -webkit-text-stroke-color: #fff;
+    -webkit-text-stroke-width: 2px;
+    color: #b0b0b0d1;
+
+    position: absolute;
+    top: 50%;
+    margin-top: -28px;
+}
+
+.homePage .mcuLinkWrapp a,
+.homePage .mcuLinkWrapp a p{
+    width: 154px;
+    max-width: 154px;
+}
+
+.homePage .mcuLinkWrapp .categoryElt{
+    font-size: 1.6rem;
+    padding: 2rem .5rem;
+}
+/*********** Movie Page *********/
+body.moviePage .jumbotron{
+    padding: 1rem 2rem;
+}
+
+body.moviePage .jumbotron h1{
+    padding-bottom: 1rem;
+}
+
+body.moviePage h2{
+    margin-bottom: 4rem;
+}
+
+body.moviePage .jumbotron .container{
+    display: flex;
+}
+
+body.moviePage .jumbotron .container div{
+    padding: 0 2rem;
+}
+body.moviePage .container div table tr td:first-child{
+    white-space:nowrap;
+    font-weight: bold;
+    padding: .3rem 2rem .3rem 0rem;
+}
+
+body.moviePage .container.categoryHolder{
+    display: flex;
+    justify-content: center;
+}
+
+/*Position du lien vers les commentaires d'une catégorie pour le film*/
+body.moviePage .categoryList .categoryHolder{
+    position: relative;
+}
+body.moviePage .categoryList .categoryHolder .seeComments{
+    position: absolute;
+    top: -.7rem;
+    right: -.7rem;
+}
+body.moviePage .categoryList .categoryHolder .seeComments i{
+    font-size: 2rem;
+    color: #ffffffe6;
+    -webkit-text-stroke-color: #ff7800;
+    -webkit-text-stroke-width: 2px;
+}
+body.moviePage .categoryList .categoryHolder .seeComments span{
+    position: absolute;
+    top: 0;
+    left: .7rem;
+    color: #ff7800;
+}
+/*Gestion de l'affichage du cadre d'infos de la fiche film < 600px*/
+@media (max-width: 770px) {
+    body.moviePage .jumbotron h1,
+    body.moviePage .jumbotron a.movieThumbnail{
+        text-align: center;
+    }
+    .filmInfosWrapper1{
+        flex-direction: column;
+    }
+    body.moviePage table.filmInfos tbody tr{
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+}
+
+    /************* Category Page ************/
+.categoryPage .categoryInfos{
+    display: flex;
+}
+.categoryPage .categoryInfos .descriptionWrapper{
+    padding: 0 1rem;
+}
+.categoryPage .categoryActions a i{
+    margin-right: .7rem;
+}
+
+@media (max-width: 770px) {
+    .categoryPage .categoryInfos{
+        flex-wrap: wrap;
+    }
+    .categoryPage .categoryInfos .titleWrapper{
+        margin: auto;
+    }
+    .categoryPage .addMovieToCategory{
+        flex-wrap: wrap;
+    }
+    .categoryPage .addMovieToCategory form{
+        max-width: 100%;
+        margin-top: 0;
+    }
+}
+/************* Categories Page ************/
+body.categoriesPage .jumbotron{
+    padding: 1rem 2rem;
+}
+.categoriesPage h2{
+    width: 100%;
+}
+.categoriesPage .search_results a{
+    display: block;
+}
+.categoryElt{
+    padding: 2rem 1rem;
+    font-size: 2rem;
+    border-radius: 15px;
+    width: max-content;
+    max-width: 300px;
+    text-align: center;
+    font-weight: bold;
+    word-wrap: break-word;
+    border: 1px solid #6c6c6c;
+}
+@media (max-width: 1200px) {
+    .categoryElt{
+        font-size: 1.8rem;
+    }
+}
+@media (max-width: 1000px) {
+    .categoryElt{
+        font-size: 1.5rem;
+    }
+}
+@media (max-width: 500px) {
+    .categoryElt{
+        font-size: 1.2rem;
+    }
+}
+
+/************** Fiche Movie ******************/
+
+/* Gestion de l'affichage des commentaires*/
+.comments_list{
+    margin-top: 2rem;
+}
+.nwl_comment_cell .comment_elt[contenteditable = true],
+.comments_list .comment_elt{
+    background-color: #e9ecef;
+    padding: 1rem;
+    border-radius: 10px;
+    color: #808080;
+    border: 1px solid #ff7800;
+    margin: 1rem 0;
+    position: relative;
+}
+.comments_list .comment_elt button.nwl_suprimer,
+.comments_list .comment_elt button.nwl_report{
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+.comments_list .comment_elt i.fa-dumpster-fire{
+    color: #cc1616;
+}
+.comments_list .comment_elt p.text_comment{
+    margin: 0 2rem;
+}
+
+/*************** Register ***************/
+.registerPage .jumbotron{
+    padding: 2rem;
+}
+.registerPage .container form{
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    padding: 1rem;
+    border: 1px solid;
+    border-radius: 10px;
+}
+.registerPage .container div.nwl_submit_btn{
+    margin-top: 2rem;
+}
+
+/*************** Dashboard ***************/
+.dashboard button{
+    border-radius: 5px;
+    border: none;
+    background-color: transparent;
+    border: 1px solid;
+    color: #ff7800;
+}
+.dashboard button:hover{
+    color: #fff;
+}
+.dashboard form{
+    display: flex;
+}
+.dashboard textarea{
+    width: 100%;
+    min-height: 140px;
+    height: 100%;
+}
+.dashboard .firstBtnsWrapper{
+    text-align: right;
+}
+
+.dashboard button.editComment{
+    /*display: none;*/
+}
+.dashboard .secondBtnsWrapper{
+    display: none;
+    position: absolute;
+    bottom: .5rem;
+    right: 1rem;
+}
+
+.deleteCol{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: red!important;
+    font-size: 1.5rem;
+}
+.deleteCol button{
+    color: red!important;
+    transition: .25s;
+}
+.deleteCol button:hover{
+    background-color: red;
+    color: #fff !important;
+}
+
+.dashboard table td.categoryElt{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.dashboard table td.categoryElt a{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+
+@media (max-width: 765px) {
+    .dashboard table th{
+        display: none;
+    }
+
+}
+
+/*.dashboard table .nwl_comment_cell .comment_elt[contenteditable = true],*/
+.dashboard table .nwl_comment_cell .comment_elt{
+    word-break: break-word;
+    margin-bottom: 3rem;
+}
+
+.dashboard i.fa-spinner{
+    display: none;
+    position: absolute;
+    top: 43%;
+    left: 46%;
+    font-size: 2.5rem;
+    color: #ff7800;
+    z-index: 1;
+}
+
+/************ Footer ***********/
+footer{
+    margin-top: 4rem;
+    padding: 5rem 1rem 1rem 1rem;
+    width: 100%;
+    min-height: 60px;
+    color: #FFFFFF;
+    border-top: 1px solid #5b5b5b;
+}
+footer .container{
+    margin: auto;
+}
+footer .nwl_copyright{
+    width: 100%;
+    text-align: center;
+}
+footer .tmdb_logo_container{
+    display: flex;
+    justify-content: flex-end;
+}
+footer img{
+    max-width: 120px;
+}
+@media (max-width: 500px) {
+    footer img{
+        max-width: 75px;
+    }
+}

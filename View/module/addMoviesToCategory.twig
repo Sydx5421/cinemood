@@ -1,0 +1,25 @@
+{% import 'form.twig' as form %}
+
+
+<div class="d-flex justify-content-center addMovieToCategory">
+    <figure class='movieElt'>
+        {% if movie.poster_path  %}
+            <img src='http://image.tmdb.org/t/p/w185{{ movie.poster_path }}' alt="{{ movie.title }} poster">
+        {% else %}
+            <img style="width : 185px; height : 278px;" src='{{ app.basepath }}Public/img/no_poster.png' alt="Poster not found">
+        {% endif %}
+        <figcaption>{{ movie.title }}</figcaption>
+    </figure>
+
+    <form  method="POST" class="basicForms d-flex flex-column" >
+        <input type="hidden" name="userId" value="{{ app.session.user.id }}">
+        <input type="hidden" name="categoryId" value="{{ category.id }}">
+        <input type="hidden" name="movieId" value="{{ movie.id }}">
+        <input type="hidden" name="movieTitle" value="{{ movie.title }}">
+        <input type="hidden" name="posterPath" value="{{ movie.poster_path }}">
+        {{ form.textarea('justificationText', {'type' : 'textarea', 'label' : 'Expliquez brièvement votre choix de classer ce film dans cette catégorie',  'cols' : '50', 'rows' : 7}) }}
+        <div class="nwl_submit_btn mt-1 p-0">
+            <button class="btn btn-primary" type="submit" name="confirm_add">Ajouter</button>
+        </div>
+    </form>
+</div>

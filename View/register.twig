@@ -1,0 +1,49 @@
+{% extends 'layout.twig' %}
+{% import 'form.twig' as form %}
+
+{% set classPage = 'registerPage' %}
+
+{% block content %}
+
+    <header>
+        <div class="jumbotron">
+            <div class="container">
+                <h1>Cinemood inscription</h1>
+                <div class="p-3">
+                    <p>Rejoignez la comunauté Cinemood !</p>
+                    <p>En vous inscrivant vous pourrez : </p>
+                    <ul>
+                        <li>proposer vos propres catégories de classement de films</li>
+                        <li>classer des films que vous avez vu dans des catégories</li>
+                    </ul>
+                    <p>Plus vous participerez aux classements Cinemood, plus vous permettrez aux membres de la communauté et à vous-même de découvrir des films suceptibles de vous plaire! </p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <Main>
+        <div class="container">
+            <h2>Inscrivez-vous</h2>
+            <form method="POST" action="{{ app.basepath }}register" class="basicForms" >
+                <table class="table_form">
+                    {{ form.input_placeholder('email', {'label' : 'Votre E-mail', 'placeholder' : 'monmail@qch.com'}) }}
+
+                    {{ form.input_placeholder('pseudo', {'label' : 'Votre Pseudo', 'placeholder' : 'pseudo'}) }}
+
+                    {{ form.input_placeholder('register_password', {'label' : 'Votre Mot de passe', 'type' : 'password', 'placeholder' : '********'}) }}
+
+                    {{ form.input_placeholder('confirm_register_password', {'label' : 'Confirmez votre mot de passe', 'type' : 'password', 'placeholder' : '********'}) }}
+                </table>
+                <div class="nwl_submit_btn">
+                    <button class="btn btn-primary" type="submit" name="confirm_register">S'inscrire</button>
+                </div>
+
+            </form>
+        </div>
+    </Main>
+{% endblock %}
+
+
+{% block javascripts %}
+{% endblock %}
