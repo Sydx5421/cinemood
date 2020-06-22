@@ -106,6 +106,7 @@ class MainController extends AbstractController
     }
 
     public function simpleMovieSearch($searchQueryGet = null, $pageQueryGet = null){
+
         $searchResult = $this->searchMovies($searchQueryGet, $pageQueryGet);
 
         echo $this->render('searchResults.twig', array('moviesSearchResults' => $searchResult["moviesSearchResults"], 'searchQuery' => $searchResult["searchQuery"], 'previousPage' => $searchResult["previousPage"], 'nextPage' => $searchResult["nextPage"]));

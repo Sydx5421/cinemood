@@ -75,7 +75,7 @@
                                     <p class="categoryElt" style="background-color: {{ category.backgroundColor }}; color : {{ category.fontColor }}"> {{ category.nom }}</p>
                                 </a>
                                 {% if category.nbComments > 0 %}
-                                    <a href="{{ app.basepath }}movie/{{ movie.id }}/cat/{{ category.id }}" class="seeComments" title="Voir les commentaires">
+                                    <a href="{{ app.basepath }}movie/{{ movie.id }}/cat/{{ category.id }}" class="seeComments" title="Voir les commentaires concernant le classement de ce film dans cette catégorie.">
                                         <i class="fas fa-comment-alt"></i>
                                         <span>{{ category.nbComments }}</span>
                                     </a>

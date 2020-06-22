@@ -14,7 +14,11 @@ trait TmdbRequestsTrait
 
         if($this->isPost()){
             $searchQueryPost = trim(htmlspecialchars($_POST['search']));
-            $pageQueryPost = trim(htmlspecialchars($_POST['pageQuery']));
+            if(isset($_POST['pageQuery'])){
+                $pageQueryPost = trim(htmlspecialchars($_POST['pageQuery']));
+            }else{
+                $pageQueryPost = 1;
+            }
             $previousPage = $pageQueryPost - 1;
             $nextPage = $pageQueryPost + 1;
 
