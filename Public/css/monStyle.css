@@ -1,6 +1,7 @@
 /*********** General **************/
 body{
-    background-color: #244b97;
+    /*background-color: #244b97;*/
+    background-color: #000;
     color: #cccaca!important;
     min-height: 100vh;
 }
@@ -68,6 +69,9 @@ a:hover{
     margin-bottom: .2rem;
     text-decoration: underline;
     font-weight: bold;
+}
+.btn-outline-success.focus, .btn-outline-success:focus {
+    box-shadow: 0 0 0 .2rem rgba(255, 149, 56, 0.33); /*orange glow*/
 }
 /************ navbar *************/
 nav.navbar{
@@ -328,8 +332,14 @@ body.moviePage .categoryList .categoryHolder .seeComments span{
     }
 
 }
+/* form moviePage */
+.moviePage form div{
+    max-width: 50%;
+    padding: 1rem;
+}
 
-    /************* Category Page ************/
+
+/************* Category Page ************/
 .categoryPage .categoryInfos{
     display: flex;
 }

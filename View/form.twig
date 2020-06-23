@@ -28,7 +28,8 @@
               {% if options.class is defined %} class="{{ options.class }}" {% endif %}
               {% if options.rows is defined %} rows="{{ options.rows }}" {% endif %}
               {% if options.cols is defined %} cols="{{ options.cols }}" {% endif %}
-              {% if options.placeholder is defined %} placeholder="{{ options.placeholder }}" {% endif %}>{% if options.value is defined %}{{ options.value }}{% endif %}</textarea>
+              {% if options.placeholder is defined %} placeholder="{{ options.placeholder }}" {% endif %}
+              {% if options.disabled is defined %} disabled {% endif %}>{% if options.value is defined %}{{ options.value }}{% endif %}</textarea>
         </td>
     </tr>
 {% endmacro %}

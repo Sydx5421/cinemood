@@ -261,6 +261,11 @@ class UserController extends AbstractController
         echo $this->render('category.twig', array('category' => $category, 'module' => $module, 'movie' => $searchResult["movie"]));
     }
 
+//    TODO
+//    Coder le traitement du formulaire permettant d'ajouter une catégorie à un film.
+    public function addCategoryToMovie($movieId, $catId = null){
+        vd($_POST);
+    }
 
 }
 

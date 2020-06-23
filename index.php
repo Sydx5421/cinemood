@@ -41,14 +41,15 @@ $router->addRoute(new Route('/createCategory', 'User', 'createCategory'));
 $router->addRoute(new Route('/categorySearchNewMovies/(\d+)', 'User', 'categorySearchNewMovies'));
 $router->addRoute(new Route('/categorySearchNewMovies/(\d+)/(\w+)/(\d+)', 'User', 'categorySearchNewMovies'));
 $router->addRoute(new Route('/addMoviesToCategory/(\d+)/(\d+)', 'User', 'addMoviesToCategory'));
+$router->addRoute(new Route('/addCategoryToMovie/(\d+)', 'User', 'addMoviesToCategory'));
 
 //------------------------------ action réservées à l'admin :
 $router->addRoute(new Route('/adminActionComment', 'admin', 'adminActionComment'));
 
-try {
+//try {
     $router->run();
-}catch (\Exception $e){
-    $errorMsg = $e->getMessage();
-    require __DIR__."/View/error.phtml";
-    die;
-}
+//}catch (\Exception $e){
+//    $errorMsg = $e->getMessage();
+//    require __DIR__."/View/error.phtml";
+//    die;
+//}

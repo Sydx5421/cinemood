@@ -61,7 +61,7 @@ class CategoryManager extends AbstractManager
         $req->closeCursor();
 
         if($categories == null){
-            return "Aucunes catégories.";
+            return "Aucune catégorie.";
         }
         return $categories;
 

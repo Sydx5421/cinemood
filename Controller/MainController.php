@@ -144,10 +144,16 @@ class MainController extends AbstractController
         $CategoryManager = new CategoryManager();
         $McuManager = new McuManager();
 
+        $allCategories = $CategoryManager->getCategories();
+
+        if($_POST){
+            vd($_POST);
+        }
+
         if($categoryId === null ){
 //            Afficher toutes les catégories liées à ce film
             $categories = $CategoryManager->getCategories($movieId);
-            echo $this->render('movie.twig', array("movie" => $infosMovie, "categories" => $categories));
+            echo $this->render('movie.twig', array("movie" => $infosMovie, "associatedCategories" => $categories, "allCategories" => $allCategories));
             die;
         }else{
             $category =  $CategoryManager->getCategory($categoryId);
