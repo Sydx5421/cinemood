@@ -63,93 +63,14 @@
     </header>
     <main>
         <div id="search_results" class="container categoryList">
-            {% if category is null %}
-            {# AFficher la liste des catégorie associée à ce film si il y en a #}
-                {% if associatedCategories is iterable %}
-                    <h2>Liste des catégories associées à ce film</h2>
-
-                    <div class="container search_results">
-                            {% for category in associatedCategories %}
-                                <div class="categoryHolder">
-                                    <a href="{{ app.basepath }}category/{{ category.id }}" title="Voir la fiche de la catégorie">
-                                        <p class="categoryElt" style="background-color: {{ category.backgroundColor }}; color : {{ category.fontColor }}"> {{ category.nom }}</p>
-                                    </a>
-                                    {% if category.nbComments > 0 %}
-                                        <a href="{{ app.basepath }}movie/{{ movie.id }}/cat/{{ category.id }}" class="seeComments" title="Voir les commentaires concernant le classement de ce film dans cette catégorie.">
-                                            <i class="fas fa-comment-alt"></i>
-                                            <span>{{ category.nbComments }}</span>
-                                        </a>
-                                    {% endif %}
-                                </div>
-                            {% endfor %}
-
-                    </div>
-                {% else %}
-                    <h2>Aucune catégorie associée à ce film pour l'instant</h2>
-{#                    <a type="button" class="btn btn-success">Ajouter une catégorie</a>#}
-                    <h3>Ajouter une nouvelle catégorie à ce film</h3>
-
-
-                    <form method="POST" {#action="{{ app.basepath }}addCategoryToMovie/{{ movie.id }}"#}>
-                        {% if allCategories is not null %}
-                            <div>
-                                <label for="cars">Selectionnez une catégorie :</label>
-                                {% if allCategories is iterable %}
-                                    <select name="cars" id="categorySelect">
-                                        <option disabled selected value> -- Selectionnez une catégorie -- </option>
-                                        {% for category in allCategories %}
-                                            <option value="{{ category.id }}">{{ category.nom }}</option>
-                                        {% endfor %}
-                                    </select>
-                                {% endif %}
-                            </div>
-                            <div>
-                                {{ form.textarea('justificationText', {'type' : 'textarea', 'label' : 'Expliquez brièvement votre choix de classer ce film dans cette catégorie',  'cols' : '50', 'rows' : 7, 'disabled':''}) }}
-                                <input type="hidden" name="userId" value="{{ app.session.user.id }}">
-                                <input type="hidden" name="movieId" value="{{ movie.id }}">
-                                <input type="hidden" name="movieTitle" value="{{ movie.title }}">
-                                <input type="hidden" name="posterPath" value="{{ movie.poster_path }}">
-                            </div>
-                            <div class="nwl_submit_btn mt-1 p-0">
-                                <button class="btn btn-primary" type="submit" name="confirm_add" disabled>Ajouter</button>
-                            </div>
-
-                        {% endif %}
-                    </form>
-
-                {% endif %}
-
-
-            {% else %}
-            {# Dans le cas ou une catégorie est déjà selectionnée, afficher les commentaires concernant ce film pour cette catégorie#}
-                <h2>Commentaires justifiant du classement de ce film dans la catégorie :</h2>
-                <div class="container categoryHolder">
-                    <a href="{{ app.basepath }}category/{{ category.id }}">
-                        <p class="categoryElt" style="background-color: {{ category.backgroundColor }}; color : {{ category.fontColor }} "> {{ category.nom }}</p>
-                    </a>
-                </div>
-                <div class="comments_list">
-                    {% if mcuList is iterable %}
-                        {% for MCUConnection in mcuList %}
-                            {% if MCUConnection.justificationComment is not null %}
-                                <div class="comment_elt">
-                                    <span><a href=""><i class="far fa-fw fa-user"></i>{{ MCUConnection.pseudo }}</a> - {{ MCUConnection.creationDate }} </span>
-                                    <p class="text_comment"> {{ MCUConnection.justificationComment }} </p>
-                                    {% if app.isAdmin == true %}
-                                        <button class="btn nwl_suprimer " data-id="{{ MCUConnection.id }}" title="Supprimer ce commentaire"><i class="fas fa-dumpster-fire"></i></button>
-{#                                    {% else %}#}
-{#                                        <button class="nwl_report" data-id="{{ MCUConnection.id }}" title="Signaler ce commentaire">Signaler</button>#}
-                                    {% endif %}
-    {#                                <i class="fas fa-dumpster-fire"></i>#}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        {# mcuList is probably a string #}
-                        {{ mcuList }}
-                    {% endif %}
-                </div>
+            {% if module == 'categoryList' %}
+                {{ include('module/movieCategoryList.twig') }}
+            {% elseif module == 'addCategory' %}
+               {{ include('module/addCategoryToMovie.twig') }}
+            {% elseif module == 'categorySelected' %}
+               {{ include('module/movieCommentsSelectedCategory.twig') }}
             {% endif %}
+
         </div>
     </main>
 

@@ -1,0 +1,35 @@
+{#This form allows for adding existing categories to the movie we're on#}
+
+<div id="search_results" class="container categoryList">
+    <h2>Aucune catégorie associée à ce film pour l'instant</h2>
+    {#                    <a type="button" class="btn btn-success">Ajouter une catégorie</a>#}
+    <h3>Ajouter une nouvelle catégorie à ce film</h3>
+
+
+    <form method="POST" {#action="{{ app.basepath }}addCategoryToMovie/{{ movie.id }}"#}>
+        {% if allCategories is not null %}
+            <div>
+                <label for="cars">Selectionnez une catégorie :</label>
+                {% if allCategories is iterable %}
+                    <select name="cars" id="categorySelect">
+                        <option disabled selected value> -- Selectionnez une catégorie -- </option>
+                        {% for category in allCategories %}
+                            <option value="{{ category.id }}">{{ category.nom }}</option>
+                        {% endfor %}
+                    </select>
+                {% endif %}
+            </div>
+            <div>
+                {{ form.textarea('justificationText', {'type' : 'textarea', 'label' : 'Expliquez brièvement votre choix de classer ce film dans cette catégorie',  'cols' : '50', 'rows' : 7, 'disabled':''}) }}
+                <input type="hidden" name="userId" value="{{ app.session.user.id }}">
+                <input type="hidden" name="movieId" value="{{ movie.id }}">
+                <input type="hidden" name="movieTitle" value="{{ movie.title }}">
+                <input type="hidden" name="posterPath" value="{{ movie.poster_path }}">
+            </div>
+            <div class="nwl_submit_btn mt-1 p-0">
+                <button class="btn btn-primary" type="submit" name="confirm_add" disabled>Ajouter</button>
+            </div>
+
+        {% endif %}
+    </form>
+</div>

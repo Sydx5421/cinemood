@@ -1,0 +1,28 @@
+{# Dans le cas ou une catégorie est déjà selectionnée, afficher les commentaires concernant ce film pour cette catégorie#}
+<h2>Commentaires justifiant du classement de ce film dans la catégorie :</h2>
+<div class="container categoryHolder">
+    <a href="{{ app.basepath }}category/{{ category.id }}">
+        <p class="categoryElt" style="background-color: {{ category.backgroundColor }}; color : {{ category.fontColor }} "> {{ category.nom }}</p>
+    </a>
+</div>
+<div class="comments_list">
+    {% if mcuList is iterable %}
+        {% for MCUConnection in mcuList %}
+            {% if MCUConnection.justificationComment is not null %}
+                <div class="comment_elt">
+                    <span><a href=""><i class="far fa-fw fa-user"></i>{{ MCUConnection.pseudo }}</a> - {{ MCUConnection.creationDate }} </span>
+                    <p class="text_comment"> {{ MCUConnection.justificationComment }} </p>
+                    {% if app.isAdmin == true %}
+                        <button class="btn nwl_suprimer " data-id="{{ MCUConnection.id }}" title="Supprimer ce commentaire"><i class="fas fa-dumpster-fire"></i></button>
+                        {#                                    {% else %}#}
+                        {#                                        <button class="nwl_report" data-id="{{ MCUConnection.id }}" title="Signaler ce commentaire">Signaler</button>#}
+                    {% endif %}
+                    {#                                <i class="fas fa-dumpster-fire"></i>#}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {# mcuList is probably a string #}
+        {{ mcuList }}
+    {% endif %}
+</div>

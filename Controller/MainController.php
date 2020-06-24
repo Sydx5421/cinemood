@@ -152,16 +152,18 @@ class MainController extends AbstractController
 
         if($categoryId === null ){
 //            Afficher toutes les catégories liées à ce film
+            $module = "categoryList";
             $categories = $CategoryManager->getCategories($movieId);
-            echo $this->render('movie.twig', array("movie" => $infosMovie, "associatedCategories" => $categories, "allCategories" => $allCategories));
+            echo $this->render('movie.twig', array("movie" => $infosMovie, "associatedCategories" => $categories, "allCategories" => $allCategories, 'module'=> $module));
             die;
         }else{
+            $module = "categorySelected";
             $category =  $CategoryManager->getCategory($categoryId);
             // récupérer les comentaires pour cette catégory et ce film
             $mcuList = $McuManager->getAllCommentsForMC($movieId, $categoryId);
 
             echo $this->render('movie.twig', array("movie" => $infosMovie, "category" =>
-                $category, "mcuList" => $mcuList));
+                $category, "mcuList" => $mcuList, 'module'=> $module));
         }
     }
 
