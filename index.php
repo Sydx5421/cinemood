@@ -30,6 +30,7 @@ $router->addRoute(new Route('/categories', 'main', 'categories'));
 $router->addRoute(new Route('/category/(\d+)', 'main', 'category'));
 $router->addRoute(new Route('/category/(\d+)/(\w+)', 'main', 'category'));
 $router->addRoute(new Route('/movie/(\d+)', 'main', 'movie'));
+
 $router->addRoute(new Route('/movie/(\d+)/cat/(\d+)', 'main', 'movie'));
 
 // ------------------- Actions réservées à l'utilisateur connecté
@@ -42,6 +43,8 @@ $router->addRoute(new Route('/categorySearchNewMovies/(\d+)', 'User', 'categoryS
 $router->addRoute(new Route('/categorySearchNewMovies/(\d+)/(\w+)/(\d+)', 'User', 'categorySearchNewMovies'));
 $router->addRoute(new Route('/addMoviesToCategory/(\d+)/(\d+)', 'User', 'addMoviesToCategory'));
 $router->addRoute(new Route('/addCategoryToMovie/(\d+)', 'User', 'addMoviesToCategory'));
+
+$router->addRoute(new Route('/movie/(\d+)/(.+)', 'main', 'movie'));
 
 //------------------------------ action réservées à l'admin :
 $router->addRoute(new Route('/adminActionComment', 'admin', 'adminActionComment'));

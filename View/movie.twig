@@ -59,6 +59,16 @@
                     </table>
                 </div>
             </div>
+            {% if app.session.user  %}
+                <div class="container categoryActions">
+                    <a type="button" href="{{ app.basepath }}movie/{{ movie.id }}" id="moviesSearch" class="btn btn_cinemood_basic_full" data-target="filmCategories"><i class="fas fa-th-list fa-fw"></i>Voir les catégories associées</a>
+                    <a type="button" href="{{ app.basepath }}movie/{{ movie.id }}/addCategories" id="moviesSearch" class="btn btn_cinemood_basic_full" data-target="categorySearch"><i class="fas fa-search fa-fw"></i>Ajouter des catégories à ce film</a>
+                </div>
+            {% else %}
+                <div class="container alert alert-primary" role="alert">
+                    <p>Connectez-vous ou <a href="{{ app.basepath }}register"> créez un compte </a> afin de pouvoir ajouter des catégories à ce film.</p>
+                </div>
+            {% endif %}
         </div>
     </header>
     <main>
@@ -66,7 +76,7 @@
             {% if module == 'categoryList' %}
                 {{ include('module/movieCategoryList.twig') }}
             {% elseif module == 'addCategory' %}
-               {{ include('module/addCategoryToMovie.twig') }}
+               {{ include('module/addCategoriesToMovie.twig') }}
             {% elseif module == 'categorySelected' %}
                {{ include('module/movieCommentsSelectedCategory.twig') }}
             {% endif %}

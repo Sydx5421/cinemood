@@ -137,7 +137,7 @@ class MainController extends AbstractController
         => $module, 'movieList' => $movieList));
     }
 
-    public function movie($movieId, $categoryId = null){
+    public function movie($movieId, $firstParam = null){
         $MovieAPI = new TmdbApi("01caf40148572dc465c9503e59ded4bf");
         $infosMovie = $MovieAPI->getMoviesById($movieId);
 
@@ -146,24 +146,37 @@ class MainController extends AbstractController
 
         $allCategories = $CategoryManager->getCategories();
 
+//        vd($movieId, $firstParam, is_numeric($firstParam));
+
         if($_POST){
             vd($_POST);
         }
 
-        if($categoryId === null ){
+        if($firstParam === null ){
 //            Afficher toutes les catégories liées à ce film
             $module = "categoryList";
             $categories = $CategoryManager->getCategories($movieId);
             echo $this->render('movie.twig', array("movie" => $infosMovie, "associatedCategories" => $categories, "allCategories" => $allCategories, 'module'=> $module));
             die;
-        }else{
+        }elseif(is_numeric($firstParam)){// $firtParam designate the id of a category
+            //TODO
+            // traiter le cas ou l'id ne correspond à rien !
+            // Afficher un NOT FOund pour la catégorie ou qqch comme ça, qui traite cette éventualité.
             $module = "categorySelected";
-            $category =  $CategoryManager->getCategory($categoryId);
+            $category =  $CategoryManager->getCategory($firstParam);
             // récupérer les comentaires pour cette catégory et ce film
-            $mcuList = $McuManager->getAllCommentsForMC($movieId, $categoryId);
+            $mcuList = $McuManager->getAllCommentsForMC($movieId, $firstParam);
 
             echo $this->render('movie.twig', array("movie" => $infosMovie, "category" =>
                 $category, "mcuList" => $mcuList, 'module'=> $module));
+        }else{ //$firtParam designate a module for the page
+            if($firstParam == "addCategories"){
+                $module = "addCategory";
+                $allCategories = $CategoryManager->getCategories();
+//                vd($allCategories);
+                echo $this->render('movie.twig', array("movie" => $infosMovie, "allCategories" => $allCategories, 'module'=> $module));
+                die;
+            }
         }
     }
 
