@@ -10,9 +10,9 @@
     <form method="POST" {#action="{{ app.basepath }}addCategoryToMovie/{{ movie.id }}"#}>
         {% if allCategories is not null %}
             <div>
-                <label for="cars">Selectionnez une catégorie :</label>
+                <label for="categoryId">Selectionnez une catégorie :</label>
                 {% if allCategories is iterable %}
-                    <select name="cars" id="categorySelect">
+                    <select name="categoryId" id="categorySelect">
                         <option disabled selected value> -- Selectionnez une catégorie -- </option>
                         {% for category in allCategories %}
                             <option value="{{ category.id }}">{{ category.nom }}</option>

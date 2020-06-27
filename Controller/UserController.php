@@ -3,6 +3,7 @@
 
 namespace App\Controller;
 
+use App\Library\API\TmdbApi;
 use App\Model\Entity\Category;
 use App\Model\Entity\MCUConnection;
 use App\Model\Entity\Movie;
@@ -187,84 +188,140 @@ class UserController extends AbstractController
      */
     public function addMoviesToCategory($catId, $movieId){
         $CategoryManager = new CategoryManager();
-        $MovieManager = new MovieManager();
-        $McuManager = new McuManager();
         $category =  $CategoryManager->getCategory($catId);
-//        vd($category); // vérifier la nature de cette variable, objet?
+
         $module = "addMovie";
         $searchResult = $this->movie($movieId);
 
         if($this->isPost()){
-//            vd($_POST, $_POST['movieId'], $_POST['movieTitle']);
-            $newMovieData = [
-                'id' => trim(htmlspecialchars($_POST['movieId'])),
-                'title' => trim(htmlspecialchars($_POST['movieTitle'])),
-                'poster_path' => trim(htmlspecialchars($_POST['posterPath'])),
-            ];
 
-            $newMovie = new Movie($newMovieData);
+            // proceed with mcuCreation() method
+            $twigVue ='category.twig';
+            $arrayTwigVue = array('category' => $category, 'module' => $module);
+            $redirectPath = 'category/' . $catId;
 
-            $justifyComment = trim(htmlspecialchars($_POST['justificationText']));
+            $this->mcuCreation($twigVue, $arrayTwigVue, $redirectPath, $category);
 
-            if(trim(htmlspecialchars($_POST['justificationText'])) == null || trim(htmlspecialchars($_POST['justificationText'])) == "" ){
-                $justifyComment = null;
-            }
-
-            $newMCUConnectionData = [
-                'movie_id' => trim(htmlspecialchars($_POST['movieId'])),
-                'category_id' => trim(htmlspecialchars($_POST['categoryId'])),
-                'user_id' => trim(htmlspecialchars($_POST['userId'])),
-                'justification_comment' => $justifyComment,
-            ];
-
-            $newMCUConnection = new MCUConnection($newMCUConnectionData);
-
-
-            if(!$MovieManager->doesMovieExist($newMovie)){
-                if($MovieManager->doesMovieExist($newMovie) === false ){
-                    // on enregistre le nouveau film
-                    $movieCreation = $MovieManager->createMovie($newMovie);
-                    if($movieCreation !== true){
-                        $this->addFlash('Erreur 1: le classement n\'a pas pu être enregistré car  ' .                         $movieCreation,'danger');
-                    echo $this->render('category.twig', array('category' => $category, 'module' => $module));
-                    }
-
-                }else{
-                    // on gère l'erreur qui a été généré
-                    $this->addFlash('Erreur 1: le classement n\'a pas pu être enregistré car  ' .                         $MovieManager->doesMovieExist($newMovie),'danger');
-                    echo $this->render('category.twig', array('category' => $category, 'module' => $module));
-                }
-            }
-            // Le film existe déjà dans notre base ou vient d'être créé, on peut donc créer la connection :
-
-            if($McuManager->doesMcuExistsAlready($newMCUConnection) > 0 ){
-                $this->addFlash('Vous avez déjà classé ce film dans cette catégorie. Vous pouvez modifier ou supprimer cette connexion depuis votre  dashboard.', 'info');
-                $this->redirect($this->basePath . 'category/' . $catId);
-                die;
-            }
-
-            $MCUConnectionCreation = $McuManager->createMovieConnection($newMCUConnection);
-
-            if($MCUConnectionCreation === true){
-                $this->addFlash('Votre classement du film "'  . $newMovie->getTitle() .  '" dans la catégorie ' .
-                    $category->getNom() . ' a bien été enregistré ! Merci pour votre contribution !', 'success');
-
-                $this->redirect($this->basePath . 'category/' . $catId);
-
-            }else{
-                // Erreur au niveau de l'enregistrement dans la base (mail ou pseudo déjà utilisés)
-                $this->addFlash('Erreur 2: le classement n\'a pas pu être enregistré car ' . $MCUConnectionCreation, 'danger');
-                $this->redirect($this->basePath . 'category/' . $catId);
-            }
         }
 
         echo $this->render('category.twig', array('category' => $category, 'module' => $module, 'movie' => $searchResult["movie"]));
     }
 
-//    TODO
-//    Coder le traitement du formulaire permettant d'ajouter une catégorie à un film.
+    /**
+     * @param $movieId
+     * @param null $catId
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     public function addCategoryToMovie($movieId, $catId = null){
-        vd($_POST);
+        $MovieAPI = new TmdbApi("01caf40148572dc465c9503e59ded4bf");
+        $infosMovie = $MovieAPI->getMoviesById($movieId);
+
+        $CategoryManager = new CategoryManager();
+        $allCategories = $CategoryManager->getCategories();
+
+        $module = "addCategory";
+
+        if($this->isPost()){
+
+            $category =  $CategoryManager->getCategory(trim(htmlspecialchars($_POST['categoryId'])));
+            // proceed with mcuCreation() method
+            $twigVue ='movie.twig';
+            $arrayTwigVue = array("movie" => $infosMovie, "allCategories" => $allCategories, 'module'=> $module);
+            $redirectPath = 'movie/' . $movieId;
+
+            $this->mcuCreation($twigVue, $arrayTwigVue, $redirectPath, $category);
+
+        }
+
+        echo $this->render('movie.twig', array("movie" => $infosMovie, "allCategories" => $allCategories, 'module'=> $module));
+        die;
+
+    }
+
+    /**
+     * @param $twigVue
+     * @param $arrayTwigVue
+     * @param $redirectPath
+     * @param $category
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
+    public function mcuCreation($twigVue, $arrayTwigVue, $redirectPath, $category){
+    // factorisation of the MCU creation process, to be used weather we come from a movie or a category.
+
+        $MovieManager = new MovieManager();
+        $McuManager = new McuManager();
+
+        $newMovieData = [
+            'id' => trim(htmlspecialchars($_POST['movieId'])),
+            'title' => trim(htmlspecialchars($_POST['movieTitle'])),
+            'poster_path' => trim(htmlspecialchars($_POST['posterPath'])),
+        ];
+
+        $newMovie = new Movie($newMovieData);
+        $justifyComment = trim(htmlspecialchars($_POST['justificationText']));
+
+        if(trim(htmlspecialchars($_POST['justificationText'])) == null || trim(htmlspecialchars($_POST['justificationText'])) == "" ){
+            $justifyComment = null;
+        }
+        $newMCUConnectionData = [
+            'movie_id' => trim(htmlspecialchars($_POST['movieId'])),
+            'category_id' => trim(htmlspecialchars($_POST['categoryId'])),
+            'user_id' => trim(htmlspecialchars($_POST['userId'])),
+            'justification_comment' => $justifyComment,
+        ];
+
+        $newMCUConnection = new MCUConnection($newMCUConnectionData);
+
+        if(!$MovieManager->doesMovieExist($newMovie)){
+            if($MovieManager->doesMovieExist($newMovie) === false ){
+                // new movie registration
+                $movieCreation = $MovieManager->createMovie($newMovie);
+                if($movieCreation !== true){
+                    $this->addFlash('Erreur 1: le classement n\'a pas pu être enregistré car  ' .                         $movieCreation,'danger');
+                    // vu à afficher si la création du film echoue :
+                    echo $this->render($twigVue, $arrayTwigVue);
+                }
+
+            }else{
+                // error management
+                $this->addFlash('Erreur 1: le classement n\'a pas pu être enregistré car  ' .                         $MovieManager->doesMovieExist($newMovie),'danger');
+                echo $this->render($twigVue, $arrayTwigVue);
+//                echo $this->render('movie.twig', array("movie" => $infosMovie, "allCategories" => $allCategories, 'module'=> $module));
+            }
+        }
+        // Now that we made sure the film exist in our DB, we can create the MCU connection :
+        // first we check that the MCU does not allready exist
+        if($McuManager->doesMcuExistsAlready($newMCUConnection) > 0 ){
+            if($twigVue ==='movie.twig'){
+                $this->addFlash('Vous avez déjà associé cette catégorie à ce film. Vous pouvez modifier ou supprimer cette connexion depuis votre  dashboard.', 'info');
+            }else{
+                $this->addFlash('Vous avez déjà classé ce film dans cette catégorie. Vous pouvez modifier ou supprimer cette connexion depuis votre  dashboard.', 'info');
+            }
+            $this->redirect($this->basePath . $redirectPath);
+            die;
+        }
+
+        $MCUConnectionCreation = $McuManager->createMovieConnection($newMCUConnection);
+
+        if($MCUConnectionCreation === true){
+            if($twigVue ==='movie.twig'){
+                $this->addFlash('Votre ajout de la catégorie "'  . $category->getNom() .  '" au film ' .
+                    $newMovie->getTitle() . ' a bien été enregistré ! Merci pour votre contribution !', 'success');
+            }else{
+                $this->addFlash('Votre classement du film "'  . $newMovie->getTitle() .  '" dans la catégorie ' .
+                    $category->getNom() . ' a bien été enregistré ! Merci pour votre contribution !', 'success');
+            }
+            $this->redirect($this->basePath . $redirectPath);
+
+        }else{
+            // Erreur au niveau de l'enregistrement dans la base (mail ou pseudo déjà utilisés)
+            $this->addFlash('Erreur 2: le classement n\'a pas pu être enregistré car ' . $MCUConnectionCreation, 'danger');
+            $this->redirect($this->basePath . $redirectPath);;
+        }
     }
 
 }

@@ -43,8 +43,7 @@ $router->addRoute(new Route('/categorySearchNewMovies/(\d+)', 'User', 'categoryS
 $router->addRoute(new Route('/categorySearchNewMovies/(\d+)/(\w+)/(\d+)', 'User', 'categorySearchNewMovies'));
 $router->addRoute(new Route('/addMoviesToCategory/(\d+)/(\d+)', 'User', 'addMoviesToCategory'));
 $router->addRoute(new Route('/addCategoryToMovie/(\d+)', 'User', 'addMoviesToCategory'));
-
-$router->addRoute(new Route('/movie/(\d+)/(.+)', 'main', 'movie'));
+$router->addRoute(new Route('/movie/(\d+)/(.+)', 'user', 'addCategoryToMovie'));
 
 //------------------------------ action réservées à l'admin :
 $router->addRoute(new Route('/adminActionComment', 'admin', 'adminActionComment'));
