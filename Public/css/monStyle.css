@@ -13,8 +13,24 @@ p{margin-bottom: 0rem}
 body .jumbotron{
     color: grey !important;
 }
+/*---blue jumbotron---*/
+/*body .jumbotron{
+    background-color: #204b91;
+}
+body .jumbotron>*{
+    color: #FFFFFF;
+}*/
+
 .nwl_orange{
     color: #ff7800;
+}
+
+/* -- My button --*/
+.nwl_btn{
+    border: 1px solid;
+}
+.nwl_btn:hover{
+    background-color: #ff7800;
 }
 
 .titleBrand{
@@ -233,6 +249,19 @@ table.table_form{
 }
 
 /*********** Home Page *********/
+.homePage .jumbotron{
+    text-align: center;
+}
+.homePage .jumbotron form{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.homePage .jumbotron table.table_form{
+    min-width: 300px;
+    max-width: 50%;
+}
+
 .homePage h2{
     width: 100%;
 }
@@ -269,6 +298,7 @@ table.table_form{
     font-size: 1.6rem;
     padding: 2rem .5rem;
 }
+
 /*********** Movie Page *********/
 body.moviePage .jumbotron{
     padding: 1rem 2rem;
@@ -512,7 +542,10 @@ body.categoriesPage .jumbotron{
     justify-content: center;
     align-items: center;
 }
-
+.callToABtnBox{
+    display: flex;
+    justify-content: space-around;
+}
 
 @media (max-width: 765px) {
     .dashboard table th{
@@ -535,6 +568,10 @@ body.categoriesPage .jumbotron{
     font-size: 2.5rem;
     color: #ff7800;
     z-index: 1;
+}
+
+.dashboard .jumbotron form{
+
 }
 
 /************ Footer ***********/

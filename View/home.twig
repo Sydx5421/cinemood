@@ -11,16 +11,18 @@
                 <p class="subtitle">Le site qui vous permet de classer et de rechercher des films selon des catégories que vous créez !</p>
 {#                <p>Pour classer un film dans une catégorie, rendez-vous sur la <a href="{{ app.basepath }}categories">page des catégories</a> et selectionnez la catégorie de votre choix ou créez-en une nouvelle! Une fois sur la page de la catégorie choisie vous pourrez rechercher le film que vous souhaitez y ajouter. N'hésitez à commenter votre classement ! </p>#}
 {#                <p>A la rechercher d'un bon film à regarder? Visiter les pages de vos catégories favorites et découvrez ce que les membres de la communauté Cinemood y ont ajouté! </p>#}
-                <p>Rechercher un film :</p>
                 <form method="POST" action="{{ app.basepath }}simpleMovieSearch" class="basicForms" >
                     <table class="table_form">
-                        {{ form.input_placeholder('search', {'placeholder' : 'Titre du film'}) }}
+                        {{ form.input_placeholder('search', {'placeholder' : 'Rechercher un film'}) }}
                     </table>
 
                     <div class="nwl_submit_btn">
-                        <button id="movieSearchBtn" class="btn btn-primary" type="submit" name="confirm_search">Search</button>
+                        <button id="movieSearchBtn" class="btn nwl_btn nwl_orange" type="submit" name="confirm_search">Search</button>
                     </div>
                 </form>
+                <div>
+                    <a href="{{ app.basepath }}categories" class="btn nwl_btn nwl_orange">Voir toutes les catégories</a>
+                </div>
             </div>
         </div>
     </header>
