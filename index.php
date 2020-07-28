@@ -10,8 +10,14 @@ use App\Library\Autoloader;
 use App\Library\RouterPOO;
 use App\Library\Route;
 
+//local version
 require 'Library\Autoloader.php';
 require 'Library\functions.php';
+
+//inline deployment version
+//require 'Library/Autoloader.php';
+//require 'Library/functions.php';
+
 Autoloader::register();
 require 'vendor/autoload.php';
 $router = new RouterPOO();

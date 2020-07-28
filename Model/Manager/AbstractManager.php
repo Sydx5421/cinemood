@@ -11,6 +11,8 @@ abstract class AbstractManager
     
     protected function dbConnect()
     {
+    //inline deployment version :
+
 //        $yaml = yaml_parse_file('./Config/parameters.yml');
 //
 //        $host = $yaml["database"]["host"];
@@ -19,6 +21,8 @@ abstract class AbstractManager
 //        $password = $yaml["database"]["password"];
 
 //        $this->db = new \PDO('mysql:host='.$host.';dbname='.$dbname.';charset=utf8', $username, $password);
+
+        //local version
         $this->db = new \PDO('mysql:host=127.0.0.1;dbname=p5_test;charset=utf8', 'root', '');
 
         return $this->db;
