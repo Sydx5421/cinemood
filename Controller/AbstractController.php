@@ -71,6 +71,7 @@ abstract class AbstractController
         $app = new \stdClass();
         $app->basepath = $this->basePath;
         $app->session = $this->session;
+        $app->userConnected = $this->userConnected;
         $app->flash = "";
         if(isset($_SESSION["message_flash"])){
             $app->flash = $_SESSION["message_flash"];

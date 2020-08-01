@@ -154,9 +154,18 @@ class MainController extends AbstractController
 
         if($firstParam === null ){
 //            Afficher toutes les catégories liées à ce film
-            $module = "categoryList";
+
             $categories = $CategoryManager->getCategories($movieId);
-            echo $this->render('movie.twig', array("movie" => $infosMovie, "associatedCategories" => $categories, "allCategories" => $allCategories, 'module'=> $module));
+
+            if($categories == null ){
+                $module = "addCategory";
+                echo $this->render('movie.twig', array("movie" => $infosMovie, "associatedCategories" => $categories, "allCategories" => $allCategories, 'module'=> $module));
+                die;
+            }else{
+                $module = "categoryList";
+                echo $this->render('movie.twig', array("movie" => $infosMovie, "associatedCategories" => $categories, "allCategories" => $allCategories, 'module'=> $module));
+                die;
+            }
             die;
         }elseif(is_numeric($firstParam)){// $firtParam designate the id of a category
             //TODO
