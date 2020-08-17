@@ -9,20 +9,34 @@
             <div class="jumbotron">
                 <div class="container">
                     <div class="categoryInfos">
-                        <div class="titleWrapper" ><h1 class="categoryElt" style="background-color: {{ category.backgroundColor }}; color : {{ category.fontColor }} ">{{ category.nom }}</h1></div>
+                        <div class="titleWrapper" ><a href="{{ app.basepath }}category/{{ category.id }}"><h1 class="categoryElt" style="background-color: {{ category.backgroundColor }}; color : {{ category.fontColor }} ">{{ category.nom }}</h1></a></div>
                         <div class="descriptionWrapper"><p>{{ category.description }}</p></div>
                     </div>
 
                     <div class="categoryActions">
-                        <a type="button" href="{{ app.basepath }}category/{{ category.id }}" id="moviesSearch" class="btn btn_cinemood_basic_full" data-target="categoryFilms"><i class="fas fa-th-list fa-fw"></i>Voir les films associés</a>
-                        <a type="button" href="{{ app.basepath }}category/{{ category.id }}/search" id="moviesSearch" class="btn btn_cinemood_basic_full" data-target="categorySearch"><i class="fas fa-search fa-fw"></i>Chercher des films à ajouter à cette catégorie</a>
+{#                        <a type="button" href="{{ app.basepath }}category/{{ category.id }}" id="moviesSearch" class="btn btn_cinemood_basic_full" data-target="categoryFilms"><i class="fas fa-th-list fa-fw"></i>Voir les films associés</a>#}
+{#                        <a type="button" href="{{ app.basepath }}category/{{ category.id }}/search" id="moviesSearch" class="btn btn_cinemood_basic_full" data-target="categorySearch"><i class="fas fa-search fa-fw"></i>Chercher des films à ajouter à cette catégorie</a>#}
+                        <h2>Recherchez des films à ajouter à cette catégorie</h2>
+                        <form method="POST" action="{{ app.basepath }}categorySearchNewMovies/{{ category.id }}" class="basicForms" >
+                            <table class="table_form">
+                                {{ form.input_placeholder('search', {'placeholder' : 'search'}) }}
+
+                                {{ form.input_placeholder('pageQuery', {'type' : 'hidden', 'value' : '1'}) }}
+                            </table>
+
+                            <div class="nwl_submit_btn">
+                                <button id="movieSearchBtn" class="btn btn-primary" type="submit" name="confirm_search">Search</button>
+                            </div>
+                        </form>
+                        {% if (module == 'categorySearch' or module == 'addMovie') %}
+                            <a type="button" href="{{ app.basepath }}category/{{ category.id }}" id="moviesSearch" class="btn btn_cinemood_basic_full" data-target="categoryFilms"><i class="fas fa-th-list fa-fw"></i>Voir les films associés à la catégorie</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         {% else %}
             <div class="jumbotron">
                 <div class="container">
-                    <p class="subtitle" >Pour ajouter des films à cette catégorie connectez-vous ou <a href="{{ app.basepath }}register">inscrivez-vous</a>!</p>
                     <div class="categoryInfos">
                         <div class="titleWrapper" ><h1 class="categoryElt" style="background-color: {{ category.backgroundColor }}; color : {{ category.fontColor }} ">{{ category.nom }}</h1></div>
                         <div class="descriptionWrapper">
@@ -30,6 +44,7 @@
                             <p>{{ category.description }}</p>
                         </div>
                     </div>
+                    <p class="subtitle" >Pour ajouter des films à cette catégorie connectez-vous ou <a  href="{{ app.basepath }}register" class="coloredLink">inscrivez-vous <i class="fas fa-sign-in-alt"></i></a></p>
                 </div>
             </div>
         {% endif %}

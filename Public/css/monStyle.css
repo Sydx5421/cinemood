@@ -37,12 +37,19 @@ body .jumbotron>*{
     color: #ff7800;
     font-size: 1.5rem;
 }
-a{
+a:not(.styledLink){
     color:grey;
 }
 a:hover{
     text-decoration: none;
     color: grey;
+}
+a.coloredLink{
+    color: #4687ec;
+}
+a.coloredLink:hover{
+    color: #ff7800;
+    text-decoration: underline;
 }
 
 .btn_cinemood_basic_full{

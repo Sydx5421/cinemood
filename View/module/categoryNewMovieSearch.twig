@@ -1,19 +1,5 @@
 {% import 'form.twig' as form %}
 
-<div class="container">
-    <h2>Recherchez des films à ajouter à cette catégorie</h2>
-    <form method="POST" action="{{ app.basepath }}categorySearchNewMovies/{{ category.id }}" class="basicForms" >
-        <table class="table_form">
-            {{ form.input_placeholder('search', {'placeholder' : 'search'}) }}
-
-            {{ form.input_placeholder('pageQuery', {'type' : 'hidden', 'value' : '1'}) }}
-        </table>
-
-        <div class="nwl_submit_btn">
-            <button id="movieSearchBtn" class="btn btn-primary" type="submit" name="confirm_search">Search</button>
-        </div>
-    </form>
-</div>
 <div class="container search_results">
     {# résultat de la recherche #}
     <div class="container">
