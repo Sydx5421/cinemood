@@ -168,9 +168,20 @@ class UserController extends AbstractController
      */
     public function categorySearchNewMovies($catId, $searchQueryGet = null, $pageQueryGet = null){
         $CategoryManager = new CategoryManager();
+        $McuManager = new McuManager();
         $category =  $CategoryManager->getCategory($catId);
         $module = "categorySearch";
         $searchResult = $this->searchMovies();
+
+        $results =$searchResult["moviesSearchResults"]->results;
+        $resultsIds = array();
+        foreach ($results as $result){
+            $resultsIds[] =  $result->id;
+        }
+//            vd($results, $resultsIds);
+            vd($McuManager->MCLinkCheck($resultsIds, $catId));
+        // TODO now that we can check for the MC link already in place, we need used the result of the MCLinkCheck method to make those movie visible on the search result list.
+        // screen
 
         if($searchQueryGet != null && $pageQueryGet != null ){
             $searchResult = $this->searchMovies($searchQueryGet, $pageQueryGet);
