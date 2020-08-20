@@ -11,7 +11,7 @@
             <div class="search_results">
                 {% for movie in moviesSearchResults.results %}
                     <a href="{{ app.basepath }}addMoviesToCategory/{{ category.id }}/{{ movie.id }}" title="Ajouter ce film à la catégorie {{ category.nom }}" class="col-md-4 text-center">
-                        <figure class='movieElt'>
+                        <figure class='movieElt {% if movie.mclink == true %} mclinktrue {% endif %}'>
                             {% if movie.poster_path  %}
                                 <img src='http://image.tmdb.org/t/p/w185{{ movie.poster_path }}' alt="{{ movie.title }} poster">
                             {% else %}

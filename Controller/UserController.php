@@ -178,10 +178,24 @@ class UserController extends AbstractController
         foreach ($results as $result){
             $resultsIds[] =  $result->id;
         }
-//            vd($results, $resultsIds);
-            vd($McuManager->MCLinkCheck($resultsIds, $catId));
-        // TODO now that we can check for the MC link already in place, we need used the result of the MCLinkCheck method to make those movie visible on the search result list.
-        // screen
+
+        $classifiedMovies = $McuManager->MCLinkCheck($resultsIds, $catId);
+
+        $classifiedMoviesIds = array();
+
+        foreach ($classifiedMovies as $movie){
+            $classifiedMoviesIds[] = $movie->getMovieId();
+        }
+//            vd($classifiedMovies, $classifiedMoviesIds, $searchResult, $searchResult["moviesSearchResults"], $results);
+         /*TODO
+         now that we can check for the MC link already in place, we need to use the result of the MCLinkCheck
+         method to make those movies visible on the search result list. */
+
+         foreach ($results as $result){
+             if(in_array($result->id, $classifiedMoviesIds) ){
+                 $result->mclink = 'true';
+             }
+         }
 
         if($searchQueryGet != null && $pageQueryGet != null ){
             $searchResult = $this->searchMovies($searchQueryGet, $pageQueryGet);

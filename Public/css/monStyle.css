@@ -250,6 +250,10 @@ table.table_form{
     border-radius: 5px;
     padding: 1rem;
 }
+figure.mclinktrue{
+    border: 2px solid #ccc;
+    /*background-color: #eaeaea;*/
+}
 .movieElt:hover{
     cursor: pointer;
     border: 2px solid #ff7800 ;
