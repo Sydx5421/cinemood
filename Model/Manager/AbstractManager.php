@@ -13,17 +13,17 @@ abstract class AbstractManager
     {
     //inline deployment version :
 
-//        $yaml = yaml_parse_file('./Config/parameters.yml');
-//
-//        $host = $yaml["database"]["host"];
-//        $dbname = $yaml["database"]["dbname"];
-//        $username = $yaml["database"]["username"];
-//        $password = $yaml["database"]["password"];
+        $yaml = yaml_parse_file('./Config/parameters.yml');
 
-//        $this->db = new \PDO('mysql:host='.$host.';dbname='.$dbname.';charset=utf8', $username, $password);
+        $host = $yaml["database"]["host"];
+        $dbname = $yaml["database"]["dbname"];
+        $username = $yaml["database"]["username"];
+        $password = $yaml["database"]["password"];
+
+        $this->db = new \PDO('mysql:host='.$host.';dbname='.$dbname.';charset=utf8', $username, $password);
 
         //local version
-        $this->db = new \PDO('mysql:host=127.0.0.1;dbname=p5_test;charset=utf8', 'root', '');
+//        $this->db = new \PDO('mysql:host=127.0.0.1;dbname=p5_test;charset=utf8', 'root', '');
 
         return $this->db;
     }
