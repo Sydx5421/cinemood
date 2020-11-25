@@ -171,9 +171,17 @@ class UserController extends AbstractController
         $McuManager = new McuManager();
         $category =  $CategoryManager->getCategory($catId);
         $module = "categorySearch";
-        $searchResult = $this->searchMovies();
+
+        if($searchQueryGet == null || $pageQueryGet == null){
+            //first query (params are in $_POST[])
+            $searchResult = $this->searchMovies();
+        }else{
+            //changing page on a preexisting query (params are in $_GET[])
+            $searchResult = $this->searchMovies($searchQueryGet, $pageQueryGet);
+        }
 
         $results =$searchResult["moviesSearchResults"]->results;
+
         $resultsIds = array();
         foreach ($results as $result){
             $resultsIds[] =  $result->id;
@@ -181,28 +189,23 @@ class UserController extends AbstractController
 
         $classifiedMovies = $McuManager->MCLinkCheck($resultsIds, $catId);
 
+
         $classifiedMoviesIds = array();
 
         foreach ($classifiedMovies as $movie){
             $classifiedMoviesIds[] = $movie->getMovieId();
         }
-//            vd($classifiedMovies, $classifiedMoviesIds, $searchResult, $searchResult["moviesSearchResults"], $results);
-         /*TODO
-         now that we can check for the MC link already in place, we need to use the result of the MCLinkCheck
-         method to make those movies visible on the search result list. */
-
-         foreach ($results as $result){
-             if(in_array($result->id, $classifiedMoviesIds) ){
-                 $result->mclink = 'true';
-             }
-         }
-
-        if($searchQueryGet != null && $pageQueryGet != null ){
-            $searchResult = $this->searchMovies($searchQueryGet, $pageQueryGet);
+        /*now that we can check for the MClink already in place, we use the result of the MCLinkCheck
+        method to make those movies visible on the search result list. */
+        foreach ($results as $result){
+            if(in_array($result->id, $classifiedMoviesIds) ){
+                $result->mclink = 'true';
+            }
         }
 
         echo $this->render('category.twig', array('category' => $category, 'module' => $module, 'moviesSearchResults' => $searchResult["moviesSearchResults"], 'searchQuery' => $searchResult["searchQuery"], 'previousPage' => $searchResult["previousPage"], 'nextPage' => $searchResult["nextPage"]));
     }
+
 
     /**
      * @param $catId
