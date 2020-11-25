@@ -5,13 +5,13 @@
     <div class="container">
         <!-- Search results description -->
         {% if searchQuery  %}
-            <h2>Résultat de la recherche pour "<span>{{searchQuery}}</span>", <span id="nb_results"></span> résultats. Page {{moviesSearchResults.page ? moviesSearchResults.page : "1"}}  sur <span id="nb_pages"></span> pages : totalPage SessionStorage : {{ app.session.totalPagesForSearch }}</h2>
+            <h2>Résultat de la recherche pour "<span>{{searchQuery}}</span>", <span id="nb_results">{{ moviesSearchResults.total_results }}</span> résultats. Page {{moviesSearchResults.page ? moviesSearchResults.page : "1"}}  sur <span id="nb_pages">{{ moviesSearchResults.total_pages }}</span> pages : totalPage SessionStorage : {{ app.session.totalPagesForSearch }}</h2>
 
             <!-- *************** film elements ***************** -->
             <div class="search_results">
                 {% for movie in moviesSearchResults.results %}
                     <a href="{{ app.basepath }}addMoviesToCategory/{{ category.id }}/{{ movie.id }}" title="Ajouter ce film à la catégorie {{ category.nom }}" class="col-md-4 text-center">
-                        <figure class='movieElt'>
+                        <figure class='movieElt {% if movie.mclink == true %} mclinktrue {% endif %}'>
                             {% if movie.poster_path  %}
                                 <img src='http://image.tmdb.org/t/p/w185{{ movie.poster_path }}' alt="{{ movie.title }} poster">
                             {% else %}
