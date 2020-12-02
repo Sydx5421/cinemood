@@ -266,22 +266,44 @@ div.movieElt figure:hover{
 .search_results div.movieElt {
     position: relative;
 }
-.search_results div.movieElt a.seeMCLink{
+.search_results div.movieElt .iconsTab{
+
     position: absolute;
-    top: 0.3rem;
-    right: -2.2rem;
-    font-size: 1.5rem;
-    text-align: center;
-    border: 1px solid aliceblue;
-    border-left: none;
+    top: 0rem;
+    /*right: -2.15rem;*/
+    right: -1.8rem;
     border-radius: 3px;
+}
+.search_results div.movieElt .iconsTab a{
+    background-color: aliceblue;
+    border: 1px solid #cbcccc;
+    border-radius: 5px;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+.search_results div.movieElt .iconsTab a.addMCULink{
+    color: #10992e;
+}
+.search_results div.movieElt .iconsTab a.deleteMCULink{
+    color: red;
+}
+.search_results div.movieElt a.seeMCLink{
+    /*font-size: 1.5rem;*/
+    text-align: center;
     padding: 0 .3rem;
     color: #439eee;
+    font-weight: bold;
 }
-.search_results div.movieElt a.seeMCLink span{
-    margin-top: -.6rem;
-    display: block;
+.search_results div.movieElt a.commentsMCLink{
+    color: #ffffffe6;
+    -webkit-text-stroke-color: #ff7800;
+    -webkit-text-stroke-width: 2px;
 }
+/*.search_results div.movieElt a.seeMCLink span{*/
+/*    margin-top: -.6rem;*/
+/*    display: block;*/
+/*}*/
 
 /*********** Home Page *********/
 .homePage .jumbotron{
