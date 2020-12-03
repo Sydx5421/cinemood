@@ -11,8 +11,8 @@
             <div class="search_results">
                 {% for movie in moviesSearchResults.results %}
                     <div class="movieElt">
-                        <a href="{{ app.basepath }}addMoviesToCategory/{{ category.id }}/{{ movie.id }}" title="Ajouter ce film à la catégorie {{ category.nom }}" class="col-md-4 text-center">
-                            <figure class='{% if movie.mclink == true %} mculinktrue {% endif %}'>
+                        <a href="{{ app.basepath }}movie/{{ movie.id }}" title="Voir la fiche du film" class="col-md-4 text-center">
+                            <figure class='{% if movie.mclink == true %} mclinktrue {% endif %}'>
                                 {% if movie.poster_path  %}
                                     <img src='http://image.tmdb.org/t/p/w185{{ movie.poster_path }}' alt="{{ movie.title }} poster">
                                 {% else %}
@@ -21,11 +21,14 @@
                                 <figcaption>{{ movie.title }}</figcaption>
                             </figure>
                         </a>
-                        {% if movie.mclink == true %}
+
                             <div class="iconsTab">
                 {#TODO Mettre un if pour gérer l'affichage du plus ou du moins en fonction de la situation#}
-                                <a href="{{ app.basepath }}movie/{{ movie.id }}/cat/{{ category.id }}" class="addMCULink"><i class="fas fa-plus"></i></a>
-{#                                <a href="{{ app.basepath }}movie/{{ movie.id }}/cat/{{ category.id }}" class="deleteMCULink"><i class="fas fa-minus"></i></a>#}
+                                {% if movie.mculink == true %}
+                                    <a href="{{ app.basepath }}dashboard/{{ app.session.user.id }}" class="deleteMCULink"><i class="fas fa-unlink"></i></a>
+                                {% else %}
+                                    <a href="{{ app.basepath }}addMoviesToCategory/{{ category.id }}/{{ movie.id }}" title="Ajouter ce film à la catégorie {{ category.nom }}"  class="addMCULink"><i class="fas fa-plus"></i></a>
+                                {% endif %}
                                 <a href="{{ app.basepath }}movie/{{ movie.id }}/cat/{{ category.id }}" class="seeMCLink" title="Nombre d'utilisateurs ayant classé ce film dans cette catégorie.">
                                     <i class="fas fa-link"></i>
                                     <span>5</span>
@@ -35,7 +38,6 @@
                                     <span>5</span>
                                 </a>
                             </div>
-                        {% endif %}
                     </div>
                 {% else %}
                     <figure class='movieElt'>

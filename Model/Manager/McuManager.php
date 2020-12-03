@@ -145,13 +145,13 @@ class McuManager extends AbstractManager
         return $mcuList;
     }
 
-    // TODO a method that checks if a movie is already classified in the category were in:
+    // Checks if a movie is already classified in the category were in:
     // takes in param an array listing the ids resulting of the API search
     // sending back only the Ids that are already linked to the category
     public function MCLinkCheck($moviesIds, $catId){
         $comma_separated = implode(",", $moviesIds);
         $db = $this->dbConnect();
-//        $req = $db->prepare("select * from mcu_connection WHERE movie_id IN (431693, 39, 603)");
+
         $req = $db->prepare("select * from mcu_connection WHERE category_id = ? AND movie_id IN ($comma_separated) ");
         $req->execute(array($catId));
 
@@ -166,7 +166,25 @@ class McuManager extends AbstractManager
 
     }
 
-//    TODO a method that checks if a movie is already classified in the category we're in by the user connected:
+    // Checks if a movie is already classified in the category we're in, by the user connected:
+    // takes in param an array listing the ids resulting of the API search and the id of the user logged in
+    // sending back only the Ids that are already linked to the category by this user
+    public function MCULinkCheck($moviesIds, $catId, $userId){
+        $comma_separated = implode(",", $moviesIds);
+        $db = $this->dbConnect();
 
+        $req = $db->prepare("select * from mcu_connection WHERE category_id = ? AND user_id = ? AND movie_id IN ($comma_separated) ");
+        $req->execute(array($catId, $userId));
+
+        $mcuList = [];
+
+        while($mcuElt = $req->fetchObject('App\Model\Entity\MCUConnection')){
+            $mcuList[] = $mcuElt;
+        }
+        $req->closeCursor();
+
+        return $mcuList;
+
+    }
 
 }

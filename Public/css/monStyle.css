@@ -253,9 +253,11 @@ div.movieElt figure{
 div.movieElt a{
     padding: 0;
 }
-div.movieElt figure.mculinktrue{
+div.movieElt figure{
     border: 2px solid #ccc;
-    /*background-color: #eaeaea;*/
+}
+div.movieElt figure.mclinktrue{
+    border: 2px solid #2f8aff;
 }
 div.movieElt figure:hover{
     cursor: pointer;
