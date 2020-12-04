@@ -188,11 +188,10 @@ class UserController extends AbstractController
         }
 
         $classifiedMovies = $McuManager->MCLinkCheck($resultsIds, $catId);
-//        id de mon utilisateur connecté
+//        id of the connected user
         $userId = $this->session["user"]->id;
         $userClassifiedMovies = $McuManager->MCULinkCheck($resultsIds, $catId, $userId);
 
-//        vd($classifiedMovies, $userClassifiedMovies);
 
         $classifiedMoviesIds = array();
         foreach ($classifiedMovies as $movie){
@@ -203,14 +202,18 @@ class UserController extends AbstractController
             $userClassifiedMoviesIds[] = $movie->getMovieId();
         }
 
-        /*now that we can check for the MClink and the MCUlink already in place, we use the result of the MCLinkCheck
-         and the MCULinkCheck methods to make those movies visible on the search results list. */
+        $mcLinkOccurencies = array_count_values ($classifiedMoviesIds);
+
+        /*now that we can check for the MClink and the MCUlink already in place, we use the result of the MCLinkCheck and the MCULinkCheck methods to make those movies visible on the search results list. */
         foreach ($results as $result){
             if(in_array($result->id, $classifiedMoviesIds) ){
                 $result->mclink = 'true';
             }
             if(in_array($result->id, $userClassifiedMoviesIds) ){
                 $result->mculink = 'true';
+            }
+            if(array_key_exists($result->id, $mcLinkOccurencies)){
+                $result->mc_link_occurence = $mcLinkOccurencies[$result->id];
             }
         }
 //        vd($results);
