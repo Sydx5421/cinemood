@@ -269,7 +269,7 @@ div.movieElt figure:hover{
     position: relative;
 }
 .search_results div.movieElt .iconsTab{
-
+    min-width: 2rem;
     position: absolute;
     top: 0rem;
     /*right: -2.15rem;*/
@@ -298,14 +298,24 @@ div.movieElt figure:hover{
     font-weight: bold;
 }
 .search_results div.movieElt a.commentsMCLink{
+    position: relative;
+    color: #ffffffe6;
+    -webkit-text-stroke-color: #ff7800;
+    -webkit-text-stroke-width: 1px;
+    padding: .1rem;
+}
+.search_results div.movieElt a.commentsMCLink i{
+    font-size: 1.5rem;
     color: #ffffffe6;
     -webkit-text-stroke-color: #ff7800;
     -webkit-text-stroke-width: 2px;
 }
-/*.search_results div.movieElt a.seeMCLink span{*/
-/*    margin-top: -.6rem;*/
-/*    display: block;*/
-/*}*/
+.search_results div.movieElt a.commentsMCLink span{
+    position: absolute;
+    top: .1rem;
+    left: 1rem;
+    font-size: .8rem;
+}
 
 /*********** Home Page *********/
 .homePage .jumbotron{

@@ -29,14 +29,18 @@
                                 {% else %}
                                     <a href="{{ app.basepath }}addMoviesToCategory/{{ category.id }}/{{ movie.id }}" title="Ajouter ce film à la catégorie {{ category.nom }}"  class="addMCULink"><i class="fas fa-plus"></i></a>
                                 {% endif %}
-                                <a href="{{ app.basepath }}movie/{{ movie.id }}/cat/{{ category.id }}" class="seeMCLink" title="Nombre d'utilisateurs ayant classé ce film dans cette catégorie.">
-                                    <i class="fas fa-link"></i>
-                                    <span>{{ movie.mc_link_occurence }}</span>
-                                </a>
-                                <a href="{{ app.basepath }}movie/{{ movie.id }}/cat/{{ category.id }}" class="commentsMCLink" title="Nombre de commentaires sur le classement de ce film dans cette catégorie.">
-                                    <i class="fas fa-comment-alt"></i>
-                                    <span>5</span>
-                                </a>
+                                {% if movie.mc_link_occurence == true %}
+                                    <a href="{{ app.basepath }}movie/{{ movie.id }}/cat/{{ category.id }}" class="seeMCLink" title="Nombre d'utilisateurs ayant classé ce film dans cette catégorie.">
+                                        <i class="fas fa-link"></i>
+                                        <span>{{ movie.mc_link_occurence }}</span>
+                                    </a>
+                                {% endif %}
+                                {% if movie.nbcomments == true %}
+                                    <a href="{{ app.basepath }}movie/{{ movie.id }}/cat/{{ category.id }}" class="commentsMCLink" title="Nombre de commentaires sur le classement de ce film dans cette catégorie.">
+                                        <i class="fas fa-comment-alt"></i>
+                                        <span>{{ movie.nbcomments }}</span>
+                                    </a>
+                                {% endif %}
                             </div>
                     </div>
                 {% else %}

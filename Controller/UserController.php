@@ -202,12 +202,28 @@ class UserController extends AbstractController
             $userClassifiedMoviesIds[] = $movie->getMovieId();
         }
 
+        $moviesNbComments = array();
+        foreach($classifiedMovies as $movie){
+            $comment = trim($movie->getJustificationComment());
+            if(isset($comment) === true && $comment !== ''){
+                $key = $movie->getMovieId();
+                if(array_key_exists($key, $moviesNbComments) ){
+                    $moviesNbComments[$key]++;
+                }else{
+                    $moviesNbComments[$key] = 1;
+                }
+            }
+        }
+
         $mcLinkOccurencies = array_count_values ($classifiedMoviesIds);
 
         /*now that we can check for the MClink and the MCUlink already in place, we use the result of the MCLinkCheck and the MCULinkCheck methods to make those movies visible on the search results list. */
         foreach ($results as $result){
             if(in_array($result->id, $classifiedMoviesIds) ){
                 $result->mclink = 'true';
+            }
+            if(array_key_exists($result->id, $moviesNbComments)){
+                $result->nbcomments = $moviesNbComments[$result->id];
             }
             if(in_array($result->id, $userClassifiedMoviesIds) ){
                 $result->mculink = 'true';
