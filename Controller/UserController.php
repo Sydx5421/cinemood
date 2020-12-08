@@ -188,20 +188,51 @@ class UserController extends AbstractController
         }
 
         $classifiedMovies = $McuManager->MCLinkCheck($resultsIds, $catId);
+//        id of the connected user
+        $userId = $this->session["user"]->id;
+        $userClassifiedMovies = $McuManager->MCULinkCheck($resultsIds, $catId, $userId);
 
 
         $classifiedMoviesIds = array();
-
         foreach ($classifiedMovies as $movie){
             $classifiedMoviesIds[] = $movie->getMovieId();
         }
-        /*now that we can check for the MClink already in place, we use the result of the MCLinkCheck
-        method to make those movies visible on the search result list. */
+        $userClassifiedMoviesIds = array();
+        foreach ($userClassifiedMovies as $movie){
+            $userClassifiedMoviesIds[] = $movie->getMovieId();
+        }
+
+        $moviesNbComments = array();
+        foreach($classifiedMovies as $movie){
+            $comment = trim($movie->getJustificationComment());
+            if(isset($comment) === true && $comment !== ''){
+                $key = $movie->getMovieId();
+                if(array_key_exists($key, $moviesNbComments) ){
+                    $moviesNbComments[$key]++;
+                }else{
+                    $moviesNbComments[$key] = 1;
+                }
+            }
+        }
+
+        $mcLinkOccurencies = array_count_values ($classifiedMoviesIds);
+
+        /*now that we can check for the MClink and the MCUlink already in place, we use the result of the MCLinkCheck and the MCULinkCheck methods to make those movies visible on the search results list. */
         foreach ($results as $result){
             if(in_array($result->id, $classifiedMoviesIds) ){
                 $result->mclink = 'true';
             }
+            if(array_key_exists($result->id, $moviesNbComments)){
+                $result->nbcomments = $moviesNbComments[$result->id];
+            }
+            if(in_array($result->id, $userClassifiedMoviesIds) ){
+                $result->mculink = 'true';
+            }
+            if(array_key_exists($result->id, $mcLinkOccurencies)){
+                $result->mc_link_occurence = $mcLinkOccurencies[$result->id];
+            }
         }
+//        vd($results);
 
         echo $this->render('category.twig', array('category' => $category, 'module' => $module, 'moviesSearchResults' => $searchResult["moviesSearchResults"], 'searchQuery' => $searchResult["searchQuery"], 'previousPage' => $searchResult["previousPage"], 'nextPage' => $searchResult["nextPage"]));
     }

@@ -242,7 +242,7 @@ table.table_form{
     width: min-content;
 }
 
-.movieElt{
+div.movieElt figure{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -250,13 +250,71 @@ table.table_form{
     border-radius: 5px;
     padding: 1rem;
 }
-figure.mclinktrue{
-    border: 2px solid #ccc;
-    /*background-color: #eaeaea;*/
+div.movieElt a{
+    padding: 0;
 }
-.movieElt:hover{
+div.movieElt figure{
+    border: 2px solid #ccc;
+}
+div.movieElt figure.mclinktrue{
+    border: 2px solid #2f8aff;
+}
+div.movieElt figure:hover{
     cursor: pointer;
     border: 2px solid #ff7800 ;
+}
+
+/* Positionnement des icones AJAX des vignettes de films dans un résultat de recherche */
+.search_results div.movieElt {
+    position: relative;
+}
+.search_results div.movieElt .iconsTab{
+    min-width: 2rem;
+    position: absolute;
+    top: 0rem;
+    /*right: -2.15rem;*/
+    right: -1.8rem;
+    border-radius: 3px;
+}
+.search_results div.movieElt .iconsTab a{
+    background-color: aliceblue;
+    border: 1px solid #cbcccc;
+    border-radius: 5px;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+.search_results div.movieElt .iconsTab a.addMCULink{
+    color: #10992e;
+}
+.search_results div.movieElt .iconsTab a.deleteMCULink{
+    color: red;
+}
+.search_results div.movieElt a.seeMCLink{
+    /*font-size: 1.5rem;*/
+    text-align: center;
+    padding: 0 .3rem;
+    color: #439eee;
+    font-weight: bold;
+}
+.search_results div.movieElt a.commentsMCLink{
+    position: relative;
+    color: #ffffffe6;
+    -webkit-text-stroke-color: #ff7800;
+    -webkit-text-stroke-width: 1px;
+    padding: .1rem;
+}
+.search_results div.movieElt a.commentsMCLink i{
+    font-size: 1.5rem;
+    color: #ffffffe6;
+    -webkit-text-stroke-color: #ff7800;
+    -webkit-text-stroke-width: 2px;
+}
+.search_results div.movieElt a.commentsMCLink span{
+    position: absolute;
+    top: .1rem;
+    left: 1rem;
+    font-size: .8rem;
 }
 
 /*********** Home Page *********/
