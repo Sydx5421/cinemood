@@ -172,13 +172,7 @@ class UserController extends AbstractController
         $category =  $CategoryManager->getCategory($catId);
         $module = "categorySearch";
 
-        if($searchQueryGet == null || $pageQueryGet == null){
-            //first query (params are in $_POST[])
-            $searchResult = $this->searchMovies();
-        }else{
-            //changing page on a preexisting query (params are in $_GET[])
-            $searchResult = $this->searchMovies($searchQueryGet, $pageQueryGet);
-        }
+        $searchResult = $this->searchMovies($searchQueryGet, $pageQueryGet);
 
         $results =$searchResult["moviesSearchResults"]->results;
 

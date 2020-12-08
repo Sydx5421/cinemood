@@ -31,16 +31,18 @@
             <!-- *************** film elements ***************** -->
             <div class="search_results">
                 {% for movie in moviesSearchResults.results %}
-                    <a href="{{ app.basepath }}movie/{{ movie.id }}" title="" class="col-12 col-xs-4 col-md-3 col-xl-2 text-center">
-                        <figure class='movieElt'>
-                            {% if movie.poster_path  %}
-                                <img src='http://image.tmdb.org/t/p/w185{{ movie.poster_path }}' alt="{{ movie.title }} poster">
-                            {% else %}
-                                <img style="width : 185px; height : 278px;" src='{{ app.basepath }}Public/img/no_poster.png' alt="Poster not found">
-                            {% endif %}
-                            <figcaption>{{ movie.title }}</figcaption>
-                        </figure>
-                    </a>
+                    <div class="movieElt">
+                        <a href="{{ app.basepath }}movie/{{ movie.id }}" title="" class="col-12 col-xs-4 col-md-3 col-xl-2 text-center">
+                            <figure class='{% if movie.cinemood_movie == true %} mclinktrue {% endif %}'>
+                                {% if movie.poster_path  %}
+                                    <img src='http://image.tmdb.org/t/p/w185{{ movie.poster_path }}' alt="{{ movie.title }} poster">
+                                {% else %}
+                                    <img style="width : 185px; height : 278px;" src='{{ app.basepath }}Public/img/no_poster.png' alt="Poster not found">
+                                {% endif %}
+                                <figcaption>{{ movie.title }}</figcaption>
+                            </figure>
+                        </a>
+                    </div>
                 {% else %}
                     <figure class='movieElt'>
                         <img style="width : 185px; height : 278px;" src='{{ app.basepath }}Public/img/no_poster.png' alt="Poster not found">

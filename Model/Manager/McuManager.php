@@ -145,6 +145,25 @@ class McuManager extends AbstractManager
         return $mcuList;
     }
 
+    //Checks if the movies are allready classified on Cinemood at all
+    public function MLinkCheck($moviesIds){
+        $comma_separated = implode(",", $moviesIds);
+        $db = $this->dbConnect();
+
+        $req = $db->prepare("select * from mcu_connection WHERE movie_id IN ($comma_separated) ");
+        $req->execute();
+
+        $mcuList = [];
+
+        while($mcuElt = $req->fetchObject('App\Model\Entity\MCUConnection')){
+            $mcuList[] = $mcuElt;
+        }
+        $req->closeCursor();
+
+        return $mcuList;
+
+    }
+
     // Checks if a movie is already classified in the category were in:
     // takes in param an array listing the ids resulting of the API search
     // sending back only the Ids that are already linked to the category

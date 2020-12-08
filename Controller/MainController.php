@@ -106,8 +106,29 @@ class MainController extends AbstractController
     }
 
     public function simpleMovieSearch($searchQueryGet = null, $pageQueryGet = null){
+        $McuManager = new McuManager();
 
         $searchResult = $this->searchMovies($searchQueryGet, $pageQueryGet);
+
+        $results =$searchResult["moviesSearchResults"]->results;
+
+        $resultsIds = array();
+        foreach ($results as $result){
+            $resultsIds[] =  $result->id;
+        }
+
+        $cinemoodMovies = $McuManager->MLinkCheck($resultsIds);
+        $cinemoodMoviesIds = array();
+        foreach ($cinemoodMovies as $movie){
+            $cinemoodMoviesIds[] = $movie->getMovieId();
+        }
+
+        foreach ($results as $result) {
+            if (in_array($result->id, $cinemoodMoviesIds)) {
+                $result->cinemood_movie = 'true';
+            }
+        }
+//        vd($cinemoodMovies, $cinemoodMoviesIds, $results);
 
         echo $this->render('searchResults.twig', array('moviesSearchResults' => $searchResult["moviesSearchResults"], 'searchQuery' => $searchResult["searchQuery"], 'previousPage' => $searchResult["previousPage"], 'nextPage' => $searchResult["nextPage"]));
 

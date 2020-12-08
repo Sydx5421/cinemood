@@ -23,7 +23,6 @@
                         </a>
 
                             <div class="iconsTab">
-                {#TODO Mettre un if pour gérer l'affichage du plus ou du moins en fonction de la situation#}
                                 {% if movie.mculink == true %}
                                     <a href="{{ app.basepath }}dashboard/{{ app.session.user.id }}" class="deleteMCULink"><i class="fas fa-unlink"></i></a>
                                 {% else %}
