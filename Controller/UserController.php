@@ -171,22 +171,21 @@ class UserController extends AbstractController
         $McuManager = new McuManager();
         $category =  $CategoryManager->getCategory($catId);
         $module = "categorySearch";
-
+        // API call
         $searchResult = $this->searchMovies($searchQueryGet, $pageQueryGet);
-
         $results =$searchResult["moviesSearchResults"]->results;
 
         $resultsIds = array();
         foreach ($results as $result){
             $resultsIds[] =  $result->id;
         }
-
+        //Checking for movies already classed in this category and retrieving their infos stored on my db
         $classifiedMovies = $McuManager->MCLinkCheck($resultsIds, $catId);
-//        id of the connected user
+        // Same for the movies classed by the user connected
         $userId = $this->session["user"]->id;
         $userClassifiedMovies = $McuManager->MCULinkCheck($resultsIds, $catId, $userId);
 
-
+        // Making tables of movies's ids with preexisting MCLink and MCULink respectively
         $classifiedMoviesIds = array();
         foreach ($classifiedMovies as $movie){
             $classifiedMoviesIds[] = $movie->getMovieId();
@@ -195,7 +194,7 @@ class UserController extends AbstractController
         foreach ($userClassifiedMovies as $movie){
             $userClassifiedMoviesIds[] = $movie->getMovieId();
         }
-
+        // Making key/value table associating each MClinked movie's id with the number of comments associated for this category
         $moviesNbComments = array();
         foreach($classifiedMovies as $movie){
             $comment = trim($movie->getJustificationComment());
@@ -208,10 +207,10 @@ class UserController extends AbstractController
                 }
             }
         }
-
+        //counting the number of MCLink for each movie's id (comments or no comments)
         $mcLinkOccurencies = array_count_values ($classifiedMoviesIds);
 
-        /*now that we can check for the MClink and the MCUlink already in place, we use the result of the MCLinkCheck and the MCULinkCheck methods to make those movies visible on the search results list. */
+        //Setting twig parameters in the result to exploit the infos recolted
         foreach ($results as $result){
             if(in_array($result->id, $classifiedMoviesIds) ){
                 $result->mclink = 'true';
@@ -226,7 +225,6 @@ class UserController extends AbstractController
                 $result->mc_link_occurence = $mcLinkOccurencies[$result->id];
             }
         }
-//        vd($results);
 
         echo $this->render('category.twig', array('category' => $category, 'module' => $module, 'moviesSearchResults' => $searchResult["moviesSearchResults"], 'searchQuery' => $searchResult["searchQuery"], 'previousPage' => $searchResult["previousPage"], 'nextPage' => $searchResult["nextPage"]));
     }
