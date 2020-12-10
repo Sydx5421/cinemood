@@ -122,10 +122,24 @@ class MainController extends AbstractController
         foreach ($cinemoodMovies as $movie){
             $cinemoodMoviesIds[] = $movie->getMovieId();
         }
+        $cinemoodMoviesIdsList = array_keys(array_count_values($cinemoodMoviesIds));
+        $userId = $this->session["user"]->id;
+
+        $userMcuElt = $McuManager->MULinkCheck($cinemoodMoviesIdsList, $userId);
+        $userMcuEltIds = array();
+        foreach ($userMcuElt as $mcuElt){
+            $userMcuEltIds[] = $mcuElt->getMovieId();
+        }
+        $userClassedMoviesIds = array_keys(array_count_values($userMcuEltIds));
+//        vd($cinemoodMoviesIds, $cinemoodMoviesIdsList, $userMcuElt, $userClassedMoviesIds);
+
 
         foreach ($results as $result) {
-            if (in_array($result->id, $cinemoodMoviesIds)) {
+            if (in_array($result->id, $cinemoodMoviesIdsList)) {
                 $result->cinemood_movie = 'true';
+            }
+            if (in_array($result->id, $userClassedMoviesIds)) {
+                $result->mu_link = 'true';
             }
         }
 //        vd($cinemoodMovies, $cinemoodMoviesIds, $results);

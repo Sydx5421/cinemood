@@ -192,8 +192,8 @@ class McuManager extends AbstractManager
         $comma_separated = implode(",", $moviesIds);
         $db = $this->dbConnect();
 
-        $req = $db->prepare("select * from mcu_connection WHERE category_id = ? AND user_id = ? AND movie_id IN ($comma_separated) ");
-        $req->execute(array($catId, $userId));
+        $req = $db->prepare("select * from mcu_connection WHERE user_id = ? AND category_id = ?  AND movie_id IN ($comma_separated) ");
+        $req->execute(array($userId, $catId));
 
         $mcuList = [];
 
@@ -204,6 +204,23 @@ class McuManager extends AbstractManager
 
         return $mcuList;
 
+    }
+    // Checks if a movie is already classified by the user connected
+    public function MULinkCheck($moviesIds, $userId){
+        $comma_separated = implode(",", $moviesIds);
+        $db = $this->dbConnect();
+
+        $req = $db->prepare("select * from mcu_connection WHERE user_id = ? AND movie_id IN ($comma_separated) ");
+        $req->execute(array($userId));
+
+        $muList = [];
+
+        while($mcuElt = $req->fetchObject('App\Model\Entity\MCUConnection')){
+            $muList[] = $mcuElt;
+        }
+        $req->closeCursor();
+
+        return $muList;
     }
 
 }

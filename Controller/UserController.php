@@ -181,15 +181,19 @@ class UserController extends AbstractController
         }
         //Checking for movies already classed in this category and retrieving their infos stored on my db
         $classifiedMovies = $McuManager->MCLinkCheck($resultsIds, $catId);
-        // Same for the movies classed by the user connected
-        $userId = $this->session["user"]->id;
-        $userClassifiedMovies = $McuManager->MCULinkCheck($resultsIds, $catId, $userId);
-
-        // Making tables of movies's ids with preexisting MCLink and MCULink respectively
+        // Making a table of movies's ids with preexisting MCLink and MCULink respectively
         $classifiedMoviesIds = array();
         foreach ($classifiedMovies as $movie){
             $classifiedMoviesIds[] = $movie->getMovieId();
         }
+        // Same for the movies classed by the user connected using the id list of MCLinked movies $classifiedMoviesIds
+        $userId = $this->session["user"]->id;
+        // Putting the Ids of the movies found by the MCLinkCheck() in a table with no duplicate to use and optimize
+        // the MCULinkCheck() search next
+        $mCLinkMovieIds = array_keys(array_count_values($classifiedMoviesIds));
+        // Checking for movies already classed by the connected user using the results of the MCLinkedCheck()
+        $userClassifiedMovies = $McuManager->MCULinkCheck($mCLinkMovieIds, $catId, $userId);
+        // Making a table of movies's ids with preexisting MCULink
         $userClassifiedMoviesIds = array();
         foreach ($userClassifiedMovies as $movie){
             $userClassifiedMoviesIds[] = $movie->getMovieId();
