@@ -106,43 +106,90 @@ class MainController extends AbstractController
     }
 
     public function simpleMovieSearch($searchQueryGet = null, $pageQueryGet = null){
+        $userId = $this->session["user"]->id;
         $McuManager = new McuManager();
-
+        // API call
         $searchResult = $this->searchMovies($searchQueryGet, $pageQueryGet);
-
         $results =$searchResult["moviesSearchResults"]->results;
-
+        // Retrieving the ids of the search results
         $resultsIds = array();
         foreach ($results as $result){
             $resultsIds[] =  $result->id;
         }
-
-        $cinemoodMovies = $McuManager->MLinkCheck($resultsIds);
-        $cinemoodMoviesIds = array();
-        foreach ($cinemoodMovies as $movie){
-            $cinemoodMoviesIds[] = $movie->getMovieId();
+        // Searching for existing MCU Elt
+        $foundMcuElts = $McuManager->MLinkCheck($resultsIds);
+        // retrieving the classed movies Ids from the MCUElt
+        $classedMoviesIds = array();
+        foreach ($foundMcuElts as $movie){
+            if(!in_array($movie->getMovieId(), $classedMoviesIds)){
+                $classedMoviesIds[] = $movie->getMovieId();
+            }
         }
-        $cinemoodMoviesIdsList = array_keys(array_count_values($cinemoodMoviesIds));
-        $userId = $this->session["user"]->id;
-
-        $userMcuElt = $McuManager->MULinkCheck($cinemoodMoviesIdsList, $userId);
-        $userMcuEltIds = array();
-        foreach ($userMcuElt as $mcuElt){
-            $userMcuEltIds[] = $mcuElt->getMovieId();
+        // user's relative data
+        // Retrieving from the $foundMcuElts the mcuElt of the user and the id list of the movies he classed
+        $userMcuElt = array();
+        $userClassedMoviesIds =array();
+        foreach ($foundMcuElts as $movie){
+            if($movie->getUserId() == $userId){
+                $userMcuElt[] = $movie;
+                if(!in_array($movie->getMovieId(), $userClassedMoviesIds)){
+                    $userClassedMoviesIds[] = $movie->getMovieId();
+                }
+            }
         }
-        $userClassedMoviesIds = array_keys(array_count_values($userMcuEltIds));
-//        vd($cinemoodMoviesIds, $cinemoodMoviesIdsList, $userMcuElt, $userClassedMoviesIds);
-
+        // movie's relative data, for each movie retrieving :
+        // the number of users who classed it, array(movieId, nbOfUser)
+        // the number of categories they're classed in, array(movieId, nbOfCat)
+        // the number of comments they have, array(movieId, nbOfCat)
+        $allUserMovieConnection = array();
+        $nbUserPerMovie = array();
+        $nbCatPerMovie = array();
+        $nbCommentsPerMovie = array();
+        foreach ($foundMcuElts as $movie){
+            // counting the users who classed each movie in $nbUserPerMovie array
+            if(array_key_exists($movie->getMovieId(), $nbUserPerMovie)){
+                if(array_key_exists($movie->getUserId(), $nbUserPerMovie[$movie->getMovieId()])){
+                    $nbUserPerMovie[$movie->getMovieId()][$movie->getUserId()]+=1 ;
+                }else{
+                    $nbUserPerMovie[$movie->getMovieId()][$movie->getUserId()] = 1;
+                }
+            }else{
+                $nbUserPerMovie[$movie->getMovieId()] = array($movie->getUserId() => 1);
+            }
+            // retrieving all the categories each movie is classed in, and counting how many times they've been classed in each one, in $nbCatPerMovie array
+            if(array_key_exists($movie->getMovieId(), $nbCatPerMovie)){
+                if(array_key_exists($movie->getCategoryId(), $nbCatPerMovie[$movie->getMovieId()])){
+                    $nbCatPerMovie[$movie->getMovieId()][$movie->getCategoryId()]+=1 ;
+                }else{
+                    $nbCatPerMovie[$movie->getMovieId()][$movie->getCategoryId()] = 1;
+                }
+            }else{
+                $nbCatPerMovie[$movie->getMovieId()] = array($movie->getCategoryId() => 1);
+            }
+            // Counting the number of comments for each movie (all categories and users combined), in $nbCommentsPerMovie array
+            if(array_key_exists($movie->getMovieId(), $nbCommentsPerMovie)){
+                if($movie->getJustificationComment() !=null && $movie->getJustificationComment() != ""){
+                    $nbCommentsPerMovie[$movie->getMovieId()]+=1;
+                }
+            }else{
+                if($movie->getJustificationComment() !=null && $movie->getJustificationComment() != ""){
+                    $nbCommentsPerMovie[$movie->getMovieId()] = 1;
+                }
+            }
+        }
+        vd($foundMcuElts, $nbCommentsPerMovie);
+        vd($foundMcuElts, $classedMoviesIds, $userMcuElt, $userClassedMoviesIds, $nbUserPerMovie,
+            $nbUserPerMovie[603][1]+=1);
 
         foreach ($results as $result) {
-            if (in_array($result->id, $cinemoodMoviesIdsList)) {
+            if (in_array($result->id, $classedMoviesIds)) {
                 $result->cinemood_movie = 'true';
             }
             if (in_array($result->id, $userClassedMoviesIds)) {
                 $result->mu_link = 'true';
             }
         }
-//        vd($cinemoodMovies, $cinemoodMoviesIds, $results);
+//        vd($foundMcuElts, $classedMoviesIds, $results);
 
         echo $this->render('searchResults.twig', array('moviesSearchResults' => $searchResult["moviesSearchResults"], 'searchQuery' => $searchResult["searchQuery"], 'previousPage' => $searchResult["previousPage"], 'nextPage' => $searchResult["nextPage"]));
 
