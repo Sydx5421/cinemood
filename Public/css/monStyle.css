@@ -288,7 +288,7 @@ div.movieElt figure:hover{
     color: #10992e;
 }
 .search_results div.movieElt .iconsTab a.deleteMCULink{
-    color: red;
+    color: #10992e;
 }
 .search_results div.movieElt a.seeMCLink{
     /*font-size: 1.5rem;*/
@@ -313,7 +313,10 @@ div.movieElt figure:hover{
 .search_results div.movieElt a.commentsMCLink span{
     position: absolute;
     top: .1rem;
-    left: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
     font-size: .8rem;
 }
 .search_results div.movieElt a.assCatNb{

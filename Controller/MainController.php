@@ -177,19 +177,31 @@ class MainController extends AbstractController
                 }
             }
         }
-        vd($foundMcuElts, $nbCommentsPerMovie);
-        vd($foundMcuElts, $classedMoviesIds, $userMcuElt, $userClassedMoviesIds, $nbUserPerMovie,
-            $nbUserPerMovie[603][1]+=1);
-
+//        vd($foundMcuElts, $nbCommentsPerMovie, $nbCatPerMovie, $nbUserPerMovie);
+//        vd($foundMcuElts, $classedMoviesIds, $userMcuElt, $userClassedMoviesIds, $nbUserPerMovie, $nbUserPerMovie[603][1]+=1);
+        //Setting twig parameters in the result to exploit the infos collected
         foreach ($results as $result) {
-            if (in_array($result->id, $classedMoviesIds)) {
+            if(in_array($result->id, $classedMoviesIds)) {
                 $result->cinemood_movie = 'true';
             }
-            if (in_array($result->id, $userClassedMoviesIds)) {
+            if(in_array($result->id, $userClassedMoviesIds)) {
                 $result->mu_link = 'true';
             }
+            if(isset($nbUserPerMovie[$result->id])){
+                // counting the nb of user who classed this movie
+                $result->nb_user = count($nbUserPerMovie[$result->id]);
+            }
+            if(isset($nbCatPerMovie[$result->id])){
+                // counting the nb of categories this movie is classed in
+                $result->nb_categories = count($nbCatPerMovie[$result->id]);
+            }
+            if(isset($nbCommentsPerMovie[$result->id])){
+                // counting the nb of categories this movie is classed in
+                $result->nb_comments = $nbCommentsPerMovie[$result->id];
+            }
+//        vd($foundMcuElts, $userMcuElt, $userClassedMoviesIds, $nbCatPerMovie, $nbUserPerMovie);
+
         }
-//        vd($foundMcuElts, $classedMoviesIds, $results);
 
         echo $this->render('searchResults.twig', array('moviesSearchResults' => $searchResult["moviesSearchResults"], 'searchQuery' => $searchResult["searchQuery"], 'previousPage' => $searchResult["previousPage"], 'nextPage' => $searchResult["nextPage"]));
 

@@ -214,7 +214,7 @@ class UserController extends AbstractController
         //counting the number of MCLink for each movie's id (comments or no comments)
         $mcLinkOccurencies = array_count_values ($classifiedMoviesIds);
 
-        //Setting twig parameters in the result to exploit the infos recolted
+        //Setting twig parameters in the result to exploit the infos collected
         foreach ($results as $result){
             if(in_array($result->id, $classifiedMoviesIds) ){
                 $result->mclink = 'true';
