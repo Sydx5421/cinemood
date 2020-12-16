@@ -47,16 +47,16 @@
                                 {% if movie.mu_link == true %}
                                     <a href="{{ app.basepath }}dashboard/{{ app.session.user.id }}" class="deleteMCULink" title="Nombre de catégories dans lesquelles vous avez classé ce film.">
                                         <i class="fas fa-link"></i>
-                                        <span>2</span>
+                                        <span>{{ movie.nb_user_classement }}</span>
                                     </a>
                                 {% else %}
-                                    <a href="{{ app.basepath }}addMoviesToCategory/{{ category.id }}/{{ movie.id }}" title="Ajouter ce film à la catégorie {{ category.nom }}"  class="addMCULink"><i class="fas fa-plus"></i></a>
+                                    <a href="{{ app.basepath }}movie/{{ movie.id }}/addCategories" title="Ajouter ce film à la catégorie {{ category.nom }}"  class="addMCULink"><i class="fas fa-plus"></i></a>
                                 {% endif %}
                             {% endif %}
                             {% if movie.cinemood_movie == true %}
                                 <a href="{{ app.basepath }}movie/{{ movie.id }}/cat/{{ category.id }}" class="seeMCLink" title="Nombre d'utilisateurs ayant classé ce film.">
                                     <i class="fas fa-users"></i>
-                                    <span>{{ movie.nb_user }}</span>
+                                    <span>{{ movie.nb_users }}</span>
 {#                                    <span>{{ movie.mc_link_occurence }}</span>#}
                                 </a>
 {#                            {% endif %}#}

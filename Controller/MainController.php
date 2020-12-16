@@ -129,14 +129,18 @@ class MainController extends AbstractController
         // Retrieving from the $foundMcuElts the mcuElt of the user and the id list of the movies he classed
         $userMcuElt = array();
         $userClassedMoviesIds =array();
+        $userMuLinkMoviesIds =  array();
         foreach ($foundMcuElts as $movie){
             if($movie->getUserId() == $userId){
                 $userMcuElt[] = $movie;
+                $userMuLinkMoviesIds[] = $movie->getMovieId();
                 if(!in_array($movie->getMovieId(), $userClassedMoviesIds)){
                     $userClassedMoviesIds[] = $movie->getMovieId();
                 }
             }
         }
+        $userMuLinkMoviesIdsCount = array_count_values($userMuLinkMoviesIds);
+
         // movie's relative data, for each movie retrieving :
         // the number of users who classed it, array(movieId, nbOfUser)
         // the number of categories they're classed in, array(movieId, nbOfCat)
@@ -177,8 +181,7 @@ class MainController extends AbstractController
                 }
             }
         }
-//        vd($foundMcuElts, $nbCommentsPerMovie, $nbCatPerMovie, $nbUserPerMovie);
-//        vd($foundMcuElts, $classedMoviesIds, $userMcuElt, $userClassedMoviesIds, $nbUserPerMovie, $nbUserPerMovie[603][1]+=1);
+
         //Setting twig parameters in the result to exploit the infos collected
         foreach ($results as $result) {
             if(in_array($result->id, $classedMoviesIds)) {
@@ -186,10 +189,13 @@ class MainController extends AbstractController
             }
             if(in_array($result->id, $userClassedMoviesIds)) {
                 $result->mu_link = 'true';
+                if(key_exists($result->id, $userMuLinkMoviesIdsCount)){
+                    $result->nb_user_classement = $userMuLinkMoviesIdsCount[$result->id];
+                }
             }
             if(isset($nbUserPerMovie[$result->id])){
                 // counting the nb of user who classed this movie
-                $result->nb_user = count($nbUserPerMovie[$result->id]);
+                $result->nb_users = count($nbUserPerMovie[$result->id]);
             }
             if(isset($nbCatPerMovie[$result->id])){
                 // counting the nb of categories this movie is classed in
@@ -199,9 +205,8 @@ class MainController extends AbstractController
                 // counting the nb of categories this movie is classed in
                 $result->nb_comments = $nbCommentsPerMovie[$result->id];
             }
-//        vd($foundMcuElts, $userMcuElt, $userClassedMoviesIds, $nbCatPerMovie, $nbUserPerMovie);
-
         }
+//        vd($results);
 
         echo $this->render('searchResults.twig', array('moviesSearchResults' => $searchResult["moviesSearchResults"], 'searchQuery' => $searchResult["searchQuery"], 'previousPage' => $searchResult["previousPage"], 'nextPage' => $searchResult["nextPage"]));
 
