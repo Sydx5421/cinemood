@@ -106,7 +106,10 @@ class MainController extends AbstractController
     }
 
     public function simpleMovieSearch($searchQueryGet = null, $pageQueryGet = null){
-        $userId = $this->session["user"]->id;
+//        vd(isset($this->session["user"]));
+        if(isset($this->session["user"])){
+            $userId = $this->session["user"]->id;
+        }
         $McuManager = new McuManager();
         // API call
         $searchResult = $this->searchMovies($searchQueryGet, $pageQueryGet);
@@ -130,12 +133,14 @@ class MainController extends AbstractController
         $userMcuElt = array();
         $userClassedMoviesIds =array();
         $userMuLinkMoviesIds =  array();
-        foreach ($foundMcuElts as $movie){
-            if($movie->getUserId() == $userId){
-                $userMcuElt[] = $movie;
-                $userMuLinkMoviesIds[] = $movie->getMovieId();
-                if(!in_array($movie->getMovieId(), $userClassedMoviesIds)){
-                    $userClassedMoviesIds[] = $movie->getMovieId();
+        if(isset($userId)){
+            foreach ($foundMcuElts as $movie){
+                if($movie->getUserId() == $userId){
+                    $userMcuElt[] = $movie;
+                    $userMuLinkMoviesIds[] = $movie->getMovieId();
+                    if(!in_array($movie->getMovieId(), $userClassedMoviesIds)){
+                        $userClassedMoviesIds[] = $movie->getMovieId();
+                    }
                 }
             }
         }
