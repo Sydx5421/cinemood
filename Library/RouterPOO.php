@@ -50,9 +50,9 @@ class RouterPOO{
         //Récupère dynamiquement l'URL relative demandée indépendamment du dossier contenant le site
 
         //local version
-        $contextDocumentRoot = $_SERVER["CONTEXT_DOCUMENT_ROOT"];
+//        $contextDocumentRoot = $_SERVER["CONTEXT_DOCUMENT_ROOT"];
         //inline deployment version
-//        $contextDocumentRoot = $_SERVER["DOCUMENT_ROOT"];
+        $contextDocumentRoot = $_SERVER["DOCUMENT_ROOT"];
 
         $rootDir = str_replace('\\', '/', realpath(__DIR__.'/../'));
         $relativeRootDir = str_replace($contextDocumentRoot, '', $rootDir);   
